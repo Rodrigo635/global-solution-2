@@ -1,0 +1,294 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5 mb-5">
+    <!-- Hero -->
+    <div class="hero position-relative overflow-hidden">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 200'><defs><linearGradient id='g' x1='0' x2='1'><stop stop-color='%234f46e5' offset='0'/><stop stop-color='%2306b6d4' offset='1'/></linearGradient></defs><path d='M0 80 C150 10 350 150 600 60 L600 200 L0 200 Z' fill='url(%23g)'/></svg>" alt="wave" class="wave-bg">
+
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title">Aprenda e encontre oportunidades. Chamadas de voz ou vídeo com mentores e recrutadores.</h1>
+                <p class="hero-sub">Conecte-se em um espaço de networking diferenciado. 
+                    Um lugar onde os usuários aprendem conversando com profissionais que trabalham em suas areas de interesse. 
+                    E empresas encontram talentos e freelancers com facilidade após entrevistas rápidas.
+                </p>
+
+                <div class="mt-4 d-flex gap-3 flex-wrap">
+                    <a href="#" class="btn btn-primary btn-lg">
+                        <i class="bi bi-telephone-fill me-2"></i>Entrar em chamada
+                    </a>
+                    <a href="#empresas" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-briefcase-fill me-2"></i>Para empresas
+                    </a>
+                </div>
+
+                <div class="mt-4 d-flex gap-3 align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check2-circle text-success me-2 fs-4"></i>
+                        <div>
+                            <div class="small text-muted">Conexões instantâneas</div>
+                            <div class="fw-semibold">Chamadas por vídeo ou voz</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center ms-4">
+                        <i class="bi bi-people-fill text-primary me-2 fs-4"></i>
+                        <div>
+                            <div class="small text-muted">Bom para quem busca emprego</div>
+                            <div class="fw-semibold">Mentoria personalizada</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mock-call">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder"
+                        alt="call mock" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section class="mt-5" id="como">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="d-flex flex-column align-items-center mb-2">
+                        <div class="badge bg-primary rounded-3 p-2">
+                            <i class="bi bi-camera-reels-fill fs-4"></i>
+                        </div>
+                        <div class="text-center">
+                            <h5 class="mt-2 mb-1">Chamadas de voz ou vídeo</h5>
+                            <p class="small text-muted mb-0">Agende ou entre em chamadas com profissionais nas áreas em que você tem interesse.</p>
+                        </div>
+                        <div class="mt-2">
+                            <a class="btn btn-outline-primary">Experimentar chamada</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="d-flex flex-column align-items-center mb-2">
+                        <div class="badge bg-success rounded-3 p-2">
+                            <i class="bi bi-people-fill fs-4"></i>
+                        </div>
+                        <div class="text-center">
+                            <h5 class="mt-2 mb-1">Contratações para empresas</h5>
+                            <p class="small text-muted mb-0">Painel para empresas contratar talentos através de entrevistas rápidas.</p>
+                        </div>
+                        <div class="mt-2">
+                            <a href="#empresas" class="btn btn-outline-success">Procurar talentos</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="d-flex flex-column align-items-center mb-2">
+                        <div class="badge bg-warning text-dark rounded-3 p-2">
+                            <i class="bi bi-briefcase-fill fs-4"></i>
+                        </div>
+                        <div class="text-center">
+                            <h5 class="mt-2 mb-1">Freelancers & Projetos</h5>
+                            <p class="small text-muted mb-0">Encontre trabalhos temporários com pagamentos rápidos e
+                                avaliações.</p>
+                        </div>
+                        <div class="mt-2">
+                            <a href="#" class="btn btn-outline-warning">Procurar vagas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Como funciona -->
+    <section class="mt-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+                <h3>Como funciona</h3>
+                <p class="text-muted">Simples, rápido e com foco em resultados. Entre em sua conta, converse, acelere sua carreira e faça um networking como nunca antes!</p>
+
+                <div class="d-flex gap-3 align-items-start mb-3">
+                    <div class="step-badge bg-primary text-white d-flex align-items-center justify-content-center">1</div>
+                    <div>
+                        <h6 class="mb-0">Encontre um mentor ou candidato</h6>
+                        <div class="small text-muted">Busca por skills, disponibilidade e avaliações.</div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 align-items-start mb-3">
+                    <div class="step-badge bg-success text-white d-flex align-items-center justify-content-center">2</div>
+                    <div>
+                        <h6 class="mb-0">Inicie a chamada</h6>
+                        <div class="small text-muted">Faça a chamada como preferir com voz ou vídeo.</div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 align-items-start">
+                    <div class="step-badge bg-warning text-dark d-flex align-items-center justify-content-center">3</div>
+                    <div>
+                        <h6 class="mb-0">Pronto para contratar</h6>
+                        <div class="small text-muted">Empresas podem contratar você através das entrevistas no site!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <h6 class="mb-3">Interface de chamada</h6>
+                <div class="p-3 feature-card">
+                    <div class="d-flex gap-3">
+                        <div class="flex-shrink-0" style="width:80px; height:80px; border-radius:12px; overflow:hidden">
+                            <img src="{% static 'img/Rodrigo.png' %}" alt="avatar" class="img-fluid"></div>
+                        <div>
+                            <div class="fw-semibold">Rodrigo Froehlich Machado</div>
+                            <div class="small text-muted">Desenvolvedor - Full-stack</div>
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-outline-success me-2"><i class="bi bi-person-fill"></i> Perfil</button>
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-camera-video-fill"></i> Vídeo</button>
+                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-mic-fill"></i> Voz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-3 mt-2 feature-card">
+                    <div class="d-flex gap-3">
+                        <div class="flex-shrink-0" style="width:80px; height:80px; border-radius:12px; overflow:hidden">
+                            <img src="{% static 'img/Miguel.png' %}" alt="avatar" class="img-fluid"></div>
+                        <div>
+                            <div class="fw-semibold">Miguel Kawe Dos Anjos Assis</div>
+                            <div class="small text-muted">Desenvolvedor - Full-stack</div>
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-outline-success me-2"><i class="bi bi-person-fill"></i> Perfil</button>
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-camera-video-fill"></i> Vídeo</button>
+                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-mic-fill"></i> Voz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Para empresas -->
+    <section class="mt-5" id="empresas">
+        <div class="rounded-3 p-4"
+            style="background:linear-gradient(90deg, rgba(15,23,42,0.03), rgba(79,70,229,0.02)); box-shadow: var(--card-shadow)">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h3>Soluções para empresas</h3>
+                    <p class="text-muted">Acesso ao painel de entrevistas, onde seu RH pode encontrar de forma rápida e fácil talentos permanentes ou freelancers com a experiência que você precisa.</p>
+                    <ul class="mb-3">
+                        <li>Filtros avançados por skill e experiência</li>
+                        <li>Entrevistas rápidas por vídeo</li>
+                        <li>Facilita o seu processo de contratação</li>
+                    </ul>
+                    <a href="#precos" class="btn btn-primary">Assine já!</a>
+                </div>
+                <div class="col-lg-5 d-none d-lg-block">
+                    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder"
+                        alt="empresa" class="img-fluid rounded-3">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preços -->
+    <section class="mt-5" id="precos">
+        <h3>Nossos preços</h3>
+        <p class="text-muted">Encontre o seu modelo ideal seja para profissionais, empresas e freelas.</p>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5>Essencial</h5>
+                        <div class="display-6 fw-bold">Grátis</div>
+                        <p class="small text-muted">Conexões limitadas, mas garantindo uma boa experiência.</p>
+                        <ul class="text-start small">
+                            <li>Até 3 chamadas por semana</li>
+                            <li>Perfis básicos</li>
+                            <li>Acesso gratuito a diversas ferramentas</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary">Começar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-primary">
+                    <div class="card-body text-center">
+                        <h5>Profissional</h5>
+                        <div class="display-6 fw-bold">R$14,99 / mês</div>
+                        <p class="small text-muted">Recomendado para quem busca mentoria constante.</p>
+                        <ul class="text-start small">
+                            <li>Chamadas ilimitadas</li>
+                            <li>Agenda prioritária</li>
+                            <li>Mentorias com profissionais verificados</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">Assinar plano</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-warning">
+                    <div class="card-body text-center">
+                        <h5>Empresas</h5>
+                        <div class="display-6 fw-bold">R$94,99 / mês</div>
+                        <p class="small text-muted">Painel completo de seleção e contratos.</p>
+                        <ul class="text-start small">
+                            <li>Entrevistas ilimitadas</li>
+                            <li>Relatórios de candidatos</li>
+                            <li>Painel de contratações</li>
+                        </ul>
+                        <a href="#" class="btn btn-warning text-black">Assinar plano</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Avaliações -->
+    <section class="mt-5">
+        <h3 class="mb-2">O que nossos usuários dizem:</h3>
+        <div class="row g-4 mt-0">
+            <div class="col-md-4">
+                <div class="p-3 pt-4 feature-card h-100">
+                    <p class="mb-2">"Consegui minha vaga após duas chamadas! Muito bom."</p>
+                    <div class="fw-semibold">Gabriel Vilela Peixoto</div>
+                    <div class="small text-muted">Desenvolvedor - Fullstack</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 pt-4 feature-card h-100">
+                    <p class="mb-2">"Graças a essa plataforma, reduzi o tempo de contratação em 70%."</p>
+                    <div class="fw-semibold">Michel Pereira Dos Santos</div>
+                    <div class="small text-muted">Desenvolvedor - Fullstack</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 pt-4 feature-card h-100">
+                    <p class="mb-2">"Ótima plataforma para freelancers encontrarem projetos."</p>
+                    <div class="fw-semibold">Luis Gustavo Fernandes Rivalta</div>
+                    <div class="small text-muted">Desenvolvedor - Fullstack</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

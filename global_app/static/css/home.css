@@ -1,0 +1,58 @@
+/* Hero */
+.hero {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    background: linear-gradient(90deg, rgba(79, 70, 229, 0.07), rgba(6, 182, 212, 0.03));
+    border-radius: 18px;
+    padding: 3.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.hero-title {
+    font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.03;
+}
+
+.hero-sub {
+    color: #334155;
+    margin-top: 0.5rem
+}
+
+.feature-card {
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.82));
+    padding: 1.25rem;
+    box-shadow: var(--card-shadow)
+}
+
+.mock-call {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+}
+
+.wave-bg{
+    position: absolute;
+    z-index: 0;
+    inset: -40% -20% auto auto;
+    pointer-events: none;
+    transform-origin: center bottom;
+    transform: rotate(-8deg);
+    opacity: 0.12;
+}
+
+.step-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    font-weight: 700
+}
+
+/* Responsive spacing tweaks */
+@media(min-width:992px) {
+    .hero {
+        padding: 4rem
+    }
+}
