@@ -43,6 +43,7 @@
     opacity: 0.12;
 }
 
+/* Badges coloridas */
 .step-badge {
     width: 44px;
     height: 44px;
@@ -50,7 +51,6 @@
     font-weight: 700
 }
 
-/* Responsive spacing tweaks */
 @media(min-width:992px) {
     .hero {
         padding: 4rem

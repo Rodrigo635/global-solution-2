@@ -1,3 +1,4 @@
+/* Variáveis */
 :root {
     --primary: #4f46e5;
     --bg-azul: #0f172a;
@@ -8,17 +9,20 @@
     font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
+/* Geral */
 body {
     background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
     color: #0f172a
 }
 
+/* Header */
 .navbar{
     backdrop-filter: blur(6px);
     background: rgba(255,255,255,0.7);
     z-index: 1100;
 }
 
+/* Footer */
 footer {
     background: var(--bg-azul);
     color: #cbd5e1;
@@ -29,6 +33,7 @@ footer a {
     text-decoration: none
 }
 
+/* Componentes e classes */
 .bg-azul-escuro {
     background: var(--bg-azul-escuro)
 }
