@@ -34,7 +34,7 @@
 
 .wave-bg{
     position: absolute;
-    z-index: 0;
+    z-index: -1;
     inset: -40% -20% auto auto;
     pointer-events: none;
     transform-origin: center bottom;
