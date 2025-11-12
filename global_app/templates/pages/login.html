@@ -1,0 +1,63 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="feature-card p-4 p-md-5">
+        <div class="text-center mb-4">
+          <h2 class="mb-1">Entrar</h2>
+          <p class="small text-muted">Acesse sua conta para iniciar chamadas e mentoria.</p>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} small">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_username" class="form-label small">Nome de usuário</label>
+            <input type="text" name="username" autofocus required class="form-control" id="id_username" value="{{ form.username.value|default:'' }}" placeholder="Digite seu nome de usuário">
+            {% if form.username.errors %}
+              <div class="text-danger small mt-1">{{ form.username.errors|striptags }}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_password" class="form-label small">Senha</label>
+            <input type="password" name="password" required class="form-control" id="id_password" placeholder="Digite sua senha">
+            {% if form.password.errors %}
+              <div class="text-danger small mt-1">{{ form.password.errors|striptags }}</div>
+            {% endif %}
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="remember" id="remember">
+              <label class="form-check-label" for="remember">Lembrar</label>
+            </div>
+            <a href="#" class="text-decoration-none">Esqueceu a senha?</a>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">Entrar</button>
+          </div>
+        </form>
+
+        <div class="text-center mt-3">
+          Não tem conta? <a href="{% url 'signup' %}" class="text-decoration-none">Criar conta</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+/* Card principal */
+.profile-header {
+    border-radius: 14px;
+    padding: 1.25rem;
+    position: relative;
+    overflow: visible;
+}
+
+.avatar-lg {
+    width: 120px;
+    height: 120px;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; 
+}
+
+.icon-perfil {
+    font-size: 70px;
+}
+
+/* Botõezinhos de redes sociais */
+.social-dot, .social-dot-placeholder span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: transparent;
+}
+
+.social-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.social-dot-placeholder span { 
+    margin-right:8px;
+}
+
+/* Botão de editar perfil*/
+.btn-edit {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: var(--card-shadow);
+}
+
+/* Quick boxes */
+.quick-box {
+    background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+    border-radius: 10px;
+    padding: 1rem;
+    min-width: 160px;
+    box-shadow: var(--card-shadow);
+}
+
+/* lista items */
+.list-group-item {
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    box-shadow: none;
+    border: 1px solid rgba(15,23,42,0.06);
+}
+
+.list-group-item .thumb-sm {
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    overflow:hidden;
+}
+
+/* Chevron > */
+.list-group-item .chev i {
+    font-size: 1.1rem;
+    color: rgba(15,23,42,0.5);
+}
+
+/* Painel lateral */
+aside .feature-card {
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+}
+
+/* Responsividade */
+@media (max-width: 991px) {
+    .avatar-lg { 
+        width:96px;
+        height:96px;
+    }
+    .btn-edit { 
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+    }
+    aside { 
+        order: 3;
+    };
+}
+
+@media (min-width: 992px) {
+    .btn-edit { 
+        position: static; 
+    }
+}

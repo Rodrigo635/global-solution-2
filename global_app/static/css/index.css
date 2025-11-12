@@ -6,13 +6,13 @@
     --accent: #06b6d4;
     --glass: rgba(255, 255, 255, 0.07);
     --card-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
-    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    font-family: 'Inter', 'Helvetica Neue', Arial;
 }
 
 /* Geral */
 body {
     background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-    color: #0f172a
+    color: #0f172a;
 }
 
 /* Header */
@@ -30,7 +30,7 @@ footer {
 
 footer a {
     color: inherit;
-    text-decoration: none
+    text-decoration: none;
 }
 
 /* Componentes e classes */
@@ -38,3 +38,20 @@ footer a {
     background: var(--bg-azul-escuro)
 }
 
+.user-nav-item {
+    width: 39px;
+    height: 39px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-size: 1.1rem;
+    transition: 0.2s ease;
+}
+
+.user-nav-item:hover {
+    background-color: var(--primary);
+    color: white;
+}

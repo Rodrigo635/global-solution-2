@@ -1,0 +1,80 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-6">
+      <div class="feature-card p-4 p-md-5">
+        <div class="text-center mb-4">
+          <h2 class="mb-1">Criar conta</h2>
+          <p class="small text-muted">Junte-se à nossa comunidade, faça chamadas, receba mentoria, seja encontrado por empresas ou contrate profissionais.</p>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} small">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="id_first_name" class="form-label small">Nome</label>
+              <input type="text" name="first_name" maxlength="30" required class="form-control" id="id_first_name" value="{{ form.first_name.value|default:'' }}" placeholder="Seu nome">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_last_name" class="form-label small">Sobrenome</label>
+              <input type="text" name="last_name" maxlength="150" class="form-control" id="id_last_name" value="{{ form.last_name.value|default:'' }}" placeholder="Seu sobrenome">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="id_username" class="form-label small">Nome de usuário</label>
+            <input type="text" name="username" required class="form-control" id="id_username" value="{{ form.username.value|default:'' }}" placeholder="Digite seu nome de usuário">
+            {% if form.username.errors %}
+              <div class="text-danger small mt-1">{{ form.username.errors|striptags }}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_email" class="form-label small">E-mail</label>
+            <input type="email" name="email" required class="form-control" id="id_email" value="{{ form.email.value|default:'' }}" placeholder="Digite seu endereço de e-mail">
+            {% if form.email.errors %}
+              <div class="text-danger small mt-1">{{ form.email.errors|striptags }}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_password1" class="form-label small">Senha</label>
+            <input type="password" name="password1" required class="form-control" id="id_password1" placeholder="Digite sua senha">
+          </div>
+
+          <div class="mb-3">
+            <label for="id_password2" class="form-label small">Confirme a senha</label>
+            <input type="password" name="password2" required class="form-control" id="id_password2" placeholder="Confirme sua senha">
+          </div>
+
+          <div class="mb-3 mt-4">
+            <p>*Ao criar uma conta, voce estará sujeito aos nossos <a href="#" class="text-decoration-none">Termos e Condições</a>.</p>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">Criar conta</button>
+          </div>
+        </form>
+
+        <div class="text-center mt-3">
+          Já tem conta? <a href="{% url 'login' %}" class="text-decoration-none">Entrar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

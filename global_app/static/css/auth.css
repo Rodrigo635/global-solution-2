@@ -1,0 +1,16 @@
+/* CSS do login e do cadastro */
+.feature-card form .form-control {
+    border-radius: 10px;
+    padding: .75rem .9rem;
+    box-shadow: none;
+    border: 1px solid rgba(15,23,42,0.06);
+}
+
+.feature-card .btn-lg {
+    border-radius: 10px;
+    padding: .8rem 1rem;
+}
+
+@media (max-width: 576px) {
+    .feature-card { padding: 1rem; }
+}
