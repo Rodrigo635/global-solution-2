@@ -16,12 +16,6 @@
           <p class="small text-muted">Acesse sua conta para iniciar chamadas e mentoria.</p>
         </div>
 
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} small">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-
         <form method="post" novalidate>
           {% csrf_token %}
           <div class="mb-3">

@@ -3,9 +3,17 @@ from .views import *
 
 urlpatterns = [
     path('', home, name='home'),
-    path('login/', login_view, name='login'),
+
+    path('login/', login, name='login'),
     path('signup/', signup, name='signup'),
-    path('logout/', logout_view, name='logout'),
-    path('profile/', profile_view, name='my_profile'),
-    path('profile/<str:username>/', profile_view, name='public_profile'),
+    path('logout/', logout, name='logout'),
+    path('profile/', profile, name='my_profile'),
+    path('profile/<str:username>/', profile, name='public_profile'),
+
+    path('feed/', feed, name='feed'),
+    path('calls/', calls, name='calls'),
+    path('chat/', chat, name='chat'),
+    
+    # Rota para curtir/descurtir posts
+    path('post/<int:post_id>/like/', toggle_like, name='toggle_like'),
 ]

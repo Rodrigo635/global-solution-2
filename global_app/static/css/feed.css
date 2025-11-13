@@ -1,0 +1,62 @@
+/* Estilo pros cards */
+.post-card {
+    transition: box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Botão de curtida */
+.btn-like {
+    border-radius: 20px;
+    padding: 0.375rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-like:hover {
+    transform: scale(1.05);
+}
+
+.btn-like i {
+    transition: all 0.3s ease;
+}
+
+/* Textarea de posts */
+textarea.form-control {
+    border-radius: 12px;
+    resize: none;
+    border: 1px solid #dee2e6;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+textarea.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Imagem de avatar */
+.rounded-circle {
+    border: 2px solid #f8f9fa;
+}
+
+/* Sticky para as sugestões de amigos quando for tela grande */
+@media (min-width: 768px) {
+    .sugestoes-sticky {
+        position: sticky;
+        z-index: 1020;
+        top: 100px;
+    }
+}
+
+/* Responsividade para imagens de posts */
+.post-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Melhorar legibilidade do conteúdo */
+.post-card p {
+    line-height: 1.6;
+    word-wrap: break-word;
+}

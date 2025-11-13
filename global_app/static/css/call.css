@@ -1,0 +1,7 @@
+.feature-card2 {
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.82));
+    padding: 1.25rem;
+    box-shadow: var(--card-shadow);
+    min-height: 55vh;
+}

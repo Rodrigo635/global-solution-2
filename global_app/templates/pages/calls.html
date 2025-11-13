@@ -1,0 +1,105 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/call.css' %}">
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-4 order-1 order-md-0">
+                <div class="feature-card p-4">
+                    <h6 class="mb-2">Sugestões para você</h6>
+
+                    {% if suggested_users %}
+                        {% for suggested_user in suggested_users %}
+                        <div class="p-3 {% if not forloop.first %}mt-2{% else %}mt-3{% endif %} card box-shadow-0">
+                            <div class="d-flex gap-3">
+                                <div class="flex-shrink-0" style="width:80px; height:80px; border-radius:12px; overflow:hidden">
+                                    {% if suggested_user.profile and suggested_user.profile.avatar %}
+                                        <img src="{{ suggested_user.profile.avatar.url }}" alt="avatar" class="img-fluid">
+                                    {% else %}
+                                        <img src="{% static 'img/default_avatar.png' %}" alt="avatar" class="img-fluid" style="width:100%; height:100%; object-fit:cover;">
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">{{ suggested_user.get_full_name|default:suggested_user.username }}</div>
+                                    <div class="small text-muted">
+                                        {% if suggested_user.profile and suggested_user.profile.bio %}
+                                            {{ suggested_user.profile.bio|truncatewords:5 }}
+                                        {% else %}
+                                            Usuário
+                                        {% endif %}
+                                    </div>
+                                    <div class="mt-2 gap-3">
+                                        <a href="{% url 'public_profile' suggested_user.username %}" class="btn btn-sm btn-outline-success mb-1"><i class="bi bi-person-fill"></i> Perfil</a>
+                                        <button class="btn btn-sm btn-outline-primary mb-1"><i class="bi bi-camera-video-fill"></i> Vídeo</button>
+                                        <button class="btn btn-sm btn-outline-secondary mb-1"><i class="bi bi-mic-fill"></i> Voz</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted py-3">
+                            <p class="small">Nenhum usuário disponível no momento.</p>
+                        </div>
+                    {% endif %}
+                
+                </div>
+            </div>
+
+            <div class="col-12 col-md-8 order-0 order-md-1">
+                <div id="search-card" class="feature-card2 p-4 p-md-5 mb-4" data-chat-url="{% url 'chat' %}">
+                    
+                    <div class="text-center mb-4">
+                        <h3>Buscar chamada</h3>
+                        <p class="small text-muted">Preencha os campos abaixo para iniciar a busca.</p>
+
+                        <form action="">
+                            <div class="row mt-4 d-flex align-items-center justify-content-center">
+                                <div class="col-12 col-md-8 text-start">
+                                    <label for="profissao" class="form-label">Profissão de interesse</label>
+                                    <select name="profissao" id="profissao" class="form-select">
+                                        <option selected disabled>Informe sua profissão de interesse</option>
+                                        <option value="1">Desenvolvedor Full Stack</option>
+                                        <option value="2">QA (Quality Assurance)</option>
+                                        <option value="3">UX Designer</option>
+                                        <option value="4">Analista de Segurança</option>
+                                        <option value="5">Engenheiro de Software</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-8 text-start mt-3">
+                                    <label for="situacao" class="form-label">Sua situação de carreira</label>
+                                    <select name="situacao" id="situacao" class="form-select">
+                                        <option selected disabled>Informe sua situação de carreira</option>
+                                        <option value="1">Quero começar a trabalhar</option>
+                                        <option value="2">Sou novo na área</option>
+                                        <option value="3">Estou em transição de carreira</option>
+                                        <option value="4">Já trabalho a algum tempo</option>
+                                        <option value="5">Sou especialista no ramo</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12 col-md-8 d-flex justify-content-between mt-4 gap-2">
+                                    <button id="btn-voice" type="button" class="btn btn-outline-secondary w-100"><i class="bi bi-mic-fill me-2"></i>Chamada de voz</button>
+                                    <button id="btn-video" type="button" class="btn btn-primary w-100"><i class="bi bi-camera-video-fill me-2"></i>Chamada de vídeo</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>                    
+                
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/calls.js' %}"></script>
+
+{% endblock %}

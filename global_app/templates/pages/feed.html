@@ -1,0 +1,154 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/call.css' %}">
+<link rel="stylesheet" href="{% static 'css/feed.css' %}">
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            
+            <!-- Sugestões para você -->
+            <div class="col-12 col-md-4 d-none d-md-block">
+                <div class="feature-card p-4 sugestoes-sticky">
+                    <h6 class="mb-2">Sugestões para você</h6>
+
+                    {% if suggested_users %}
+                        {% for suggested_user in suggested_users %}
+                        <div class="p-3 {% if not forloop.first %}mt-2{% else %}mt-3{% endif %} card box-shadow-0">
+                            <div class="d-flex gap-3">
+                                <div class="flex-shrink-0" style="width:80px; height:80px; border-radius:12px; overflow:hidden">
+                                    {% if suggested_user.profile and suggested_user.profile.avatar %}
+                                        <img src="{{ suggested_user.profile.avatar.url }}" alt="avatar" class="img-fluid" style="width:100%; height:100%; object-fit:cover;">
+                                    {% else %}
+                                        <img src="{% static 'img/default_avatar.png' %}" alt="avatar" class="img-fluid" style="width:100%; height:100%; object-fit:cover;">
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">{{ suggested_user.get_full_name|default:suggested_user.username }}</div>
+                                    <div class="small text-muted">
+                                        {% if suggested_user.profile and suggested_user.profile.bio %}
+                                            {{ suggested_user.profile.bio|truncatewords:5 }}
+                                        {% else %}
+                                            Usuário
+                                        {% endif %}
+                                    </div>
+                                    <div class="mt-2 gap-3">
+                                        <a href="{% url 'public_profile' suggested_user.username %}" class="btn btn-sm btn-outline-success mb-1"><i class="bi bi-person-fill"></i> Perfil</a>
+                                        <button class="btn btn-sm btn-outline-primary mb-1"><i class="bi bi-camera-video-fill"></i> Vídeo</button>
+                                        <button class="btn btn-sm btn-outline-secondary mb-1"><i class="bi bi-mic-fill"></i> Voz</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted py-3">
+                            <p class="small">Nenhum usuário disponível no momento.</p>
+                        </div>
+                    {% endif %}
+                
+                </div>
+            </div>
+
+            <!-- Feed -->
+            <div class="col-12 col-md-8">
+                
+                <!-- Formulário pra postar -->
+                <div class="feature-card p-4 mb-4">
+                    <h6 class="mb-3">Criar publicação</h6>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="flex-shrink-0">
+                                {% if request.user.profile and request.user.profile.avatar %}
+                                    <img src="{{ request.user.profile.avatar.url }}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
+                                {% else %}
+                                    <img src="{% static 'img/default_avatar.png' %}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1">
+                                {{ form.content }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.image }}
+                        </div>
+                        
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send-fill me-2"></i>Publicar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Posts do Feed -->
+                {% if posts %}
+                    {% for post in posts %}
+                    <div class="feature-card p-4 mb-4 post-card">
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="flex-shrink-0">
+                                <a href="{% url 'public_profile' post.author.username %}">
+                                    {% if post.author.profile and post.author.profile.avatar %}
+                                        <img src="{{ post.author.profile.avatar.url }}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
+                                    {% else %}
+                                        <img src="{% static 'img/default_avatar.png' %}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold">
+                                    <a href="{% url 'public_profile' post.author.username %}" class="text-decoration-none text-dark">
+                                        {{ post.author.get_full_name|default:post.author.username }}
+                                    </a>
+                                </div>
+                                <div class="small text-muted">{{ post.created_at|timesince }} atrás</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="mb-0">{{ post.content }}</p>
+                        </div>
+
+                        {% if post.image %}
+                        <div class="mb-3">
+                            <img src="{{ post.image.url }}" alt="Post image" class="img-fluid rounded" style="max-height:500px; width:100%; object-fit:cover;">
+                        </div>
+                        {% endif %}
+
+                        <div class="border-top pt-3">
+                            <button 
+                                class="btn btn-sm btn-like {% if post.user_has_liked %}btn-danger{% else %}btn-outline-danger{% endif %}" 
+                                data-post-id="{{ post.id }}"
+                                onclick="toggleLike({{ post.id }})">
+                                <i class="bi {% if post.user_has_liked %}bi-heart-fill{% else %}bi-heart{% endif %}" id="like-icon-{{ post.id }}"></i>
+                                <span id="like-count-{{ post.id }}">{{ post.total_likes }}</span>
+                                <span class="d-none d-sm-inline">curtida{{ post.total_likes|pluralize }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="feature-card p-5 text-center">
+                        <i class="bi bi-chat-square-text display-1 text-muted"></i>
+                        <h5 class="mt-3">Nenhuma publicação ainda</h5>
+                        <p class="text-muted">Seja o primeiro a compartilhar algo!</p>
+                    </div>
+                {% endif %}
+                
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/feed.js' %}"></script>
+
+{% endblock %}

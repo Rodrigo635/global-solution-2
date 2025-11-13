@@ -1,0 +1,31 @@
+/* Garante altura mínima confortável */
+.chat-container {
+  height: 70vh;
+  max-height: 85vh;
+  background-color: var(--bs-body-bg);
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Corpo do chat com rolagem independente */
+.chat-body {
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0; /* Importante para flexbox funcionar corretamente */
+}
+
+/* Input fixo ao fundo */
+.chat-input {
+  background-color: var(--bs-body-bg);
+  flex-shrink: 0;
+}
+
+/* Garante que as colunas fiquem lado a lado em telas médias e grandes */
+@media (min-width: 768px) {
+  .col-md-8,
+  .col-md-4 {
+    flex: 0 0 auto;
+  }
+}
