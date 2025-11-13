@@ -44,7 +44,7 @@ textarea.form-control:focus {
 @media (min-width: 768px) {
     .sugestoes-sticky {
         position: sticky;
-        z-index: 1020;
+        z-index: 1;
         top: 100px;
     }
 }
