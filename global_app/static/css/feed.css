@@ -38,6 +38,18 @@ textarea.form-control:focus {
 /* Imagem de avatar */
 .rounded-circle {
     border: 2px solid #f8f9fa;
+    width: 60px;
+    height: 60px;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; 
+}
+
+.icon-perfil {
+    font-size: 30px;
 }
 
 /* Sticky para as sugestões de amigos quando for tela grande */

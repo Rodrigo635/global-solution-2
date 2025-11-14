@@ -73,7 +73,6 @@ def profile(request, username=None):
 
 @login_required
 def feed(request):
-    # Buscar usuários sugeridos (excluindo o usuário logado)
     suggested_users = User.objects.exclude(id=request.user.id).select_related('profile')[:5]
     
     # Buscar todos os posts (ordenados por data)
@@ -104,7 +103,6 @@ def feed(request):
 
 @login_required
 def calls(request):
-    # Buscar usuários sugeridos (excluindo o usuário logado)
     suggested_users = User.objects.exclude(id=request.user.id).select_related('profile')[:5]
     
     context = {
@@ -124,7 +122,7 @@ def toggle_like(request, post_id):
         like, created = Like.objects.get_or_create(user=request.user, post=post)
         
         if not created:
-            # Se já existia, remove a curtida
+            # Se já curtiu, remove a curtida
             like.delete()
             liked = False
         else:

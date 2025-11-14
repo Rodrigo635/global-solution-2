@@ -11,38 +11,63 @@
   <div class="container py-5">
     <div class="row g-4">
       
-      <!-- Chamada de vídeo ou voz -->
-      <div class="col-12 col-md-8">
-        <div class="feature-card p-4 p-md-5 mb-4">
-        </div>
-      </div>
+        <!-- Chamada de vídeo ou voz -->
+        <div class="col-12 col-md-8">
+        <div class="feature-card p-0 mb-4 call-container">
+            <!-- Vídeo do outro usuário -->
+            <img src="{% static 'img/chamada.gif' %}" alt="avatar" class="img-fluid">
+            
+            <div class="call-controls">
+                <button class="control-btn camera active" id="cameraBtn" title="Câmera">
+                    <i class="bi bi-camera-video-fill"></i>
+                </button>
 
-      <!-- Chat -->
-      <div class="col-12 col-md-4">
-        <div class="feature-card p-0 d-flex flex-column chat-container">
-          
-          <div class="chat-header d-flex justify-content-between align-items-center p-3 border-bottom">
-            <h6 class="mb-0">Chat</h6>
-            <a href="#" class="text-decoration-none text-muted">
-              <i class="bi bi-three-dots-vertical"></i>
-            </a>
-          </div>
+                <button class="control-btn mic active" id="micBtn" title="Microfone">
+                    <i class="bi bi-mic-fill"></i>
+                </button>
 
-          <div class="chat-body flex-grow-1 p-3 overflow-auto d-flex flex-column justify-content-end">
-            <!-- Aqui vão aparecer as mensagens quando eu adicionar essa parte -->
-            <div class="text-muted small text-center">Nenhuma mensagem ainda</div>
-          </div>
-
-          <div class="chat-input border-top p-3">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Digite uma mensagem">
-              <button class="btn btn-outline-primary" type="button"><i class="bi bi-send-fill me-2"></i>Enviar</button>
+                <button class="control-btn disconnect" id="disconnectBtn" title="Desconectar">
+                    <i class="bi bi-telephone-x-fill"></i>
+                </button>
             </div>
-          </div>
 
+            <!-- Preview da câmera do usuário -->
+            <div class="user-preview">
+                <div class="user-preview-placeholder">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            </div>
         </div>
-      </div>
+        </div>
+
+        <!-- Chat -->
+        <div class="col-12 col-md-4">
+            <div class="feature-card p-0 d-flex flex-column chat-container">
+          
+                <div class="chat-header d-flex justify-content-between align-items-center p-3 border-bottom">
+                    <h6 class="mb-0">Chat com Fulano Beltrano</h6>
+                    <a href="#" class="text-decoration-none text-muted">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </a>
+                </div>
+
+                <div class="chat-body flex-grow-1 p-3 overflow-auto d-flex flex-column justify-content-end">
+                    <!-- Aqui vão aparecer as mensagens quando eu adicionar essa parte -->
+                    <div class="text-muted small text-center">Nenhuma mensagem ainda</div>
+                </div>
+
+                <div class="chat-input border-top p-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Digite uma mensagem">
+                        <button class="btn btn-outline-primary" type="button"><i class="bi bi-send-fill me-2"></i>Enviar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
   </div>
 </section>
+
+<script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}

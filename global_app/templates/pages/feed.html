@@ -69,7 +69,7 @@
                                 {% if request.user.profile and request.user.profile.avatar %}
                                     <img src="{{ request.user.profile.avatar.url }}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
                                 {% else %}
-                                    <img src="{% static 'img/default_avatar.png' %}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
+                                    <i class="bi bi-person-fill text-white icon-perfil rounded-circle"></i>
                                 {% endif %}
                             </div>
                             <div class="flex-grow-1">
@@ -99,7 +99,7 @@
                                     {% if post.author.profile and post.author.profile.avatar %}
                                         <img src="{{ post.author.profile.avatar.url }}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
                                     {% else %}
-                                        <img src="{% static 'img/default_avatar.png' %}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
+                                        <i class="bi bi-person-fill text-white icon-perfil rounded-circle"></i>
                                     {% endif %}
                                 </a>
                             </div>
