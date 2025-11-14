@@ -4,6 +4,55 @@
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<style>
+  .settings-section {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  
+  .settings-header {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s;
+  }
+  
+  .settings-header:hover {
+    background-color: var(--bs-secondary-bg);
+  }
+  
+  .settings-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  
+  .settings-content.show {
+    max-height: 1000px;
+    transition: max-height 0.5s ease-in;
+  }
+  
+  .chevron-icon {
+    transition: transform 0.3s;
+  }
+  
+  .chevron-icon.rotated {
+    transform: rotate(90deg);
+  }
+  
+  .device-card {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .current-device {
+    border-color: var(--bs-success);
+    background-color: var(--bs-success-bg-subtle);
+  }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -62,37 +111,130 @@
 
       <!-- Configurações -->
       <h6 class="mb-3">Configurações</h6>
-      <div class="list-group mb-0">
-        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-4">
+      
+      <!-- Seção: Configurações -->
+      <div class="settings-section">
+        <div class="settings-header p-4 d-flex align-items-center justify-content-between" data-bs-toggle="collapse" data-bs-target="#settingsContent">
           <div class="d-flex align-items-center gap-3">
-            <div>
-              <div class="fw-semibold"><i class="bi bi-gear-fill me-2"></i>Configurações</div>
+            <i class="bi bi-gear-fill fs-5"></i>
+            <div class="fw-semibold">Configurações</div>
+          </div>
+          <i class="bi bi-chevron-right chevron-icon"></i>
+        </div>
+        <div class="collapse settings-content" id="settingsContent">
+          <div class="p-4 border-top">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div class="fw-semibold mb-1">Modo Escuro</div>
+                <div class="small text-muted">Ativa o tema escuro em todo o site</div>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="darkModeSwitch" 
+                       {% if profile.dark_mode %}checked{% endif %}>
+              </div>
             </div>
           </div>
-          <div class="chev">
-            <i class="bi bi-chevron-right"></i>
-          </div>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-4">
+        </div>
+      </div>
+
+      <!-- Seção: Segurança -->
+      <div class="settings-section">
+        <div class="settings-header p-4 d-flex align-items-center justify-content-between" data-bs-toggle="collapse" data-bs-target="#securityContent">
           <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-shield-fill fs-5"></i>
+            <div class="fw-semibold">Segurança</div>
+          </div>
+          <i class="bi bi-chevron-right chevron-icon"></i>
+        </div>
+        <div class="collapse settings-content" id="securityContent">
+          <div class="p-4 border-top">
+            <!-- Autenticação de 2 fatores -->
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <div class="fw-semibold mb-1">Autenticação de 2 Fatores</div>
+                  <div class="small text-muted">Adicione uma camada extra de segurança à sua conta</div>
+                </div>
+                <span class="badge bg-danger">Desativado</span>
+              </div>
+              <button class="btn btn-outline-primary btn-sm">Configurar</button>
+            </div>
+            
+            <!-- Dispositivos conectados -->
             <div>
-              <div class="fw-semibold"><i class="bi bi-shield-fill me-2"></i>Segurança</div>
+              <div class="fw-semibold mb-3">Dispositivos Conectados</div>
+              <div class="device-card current-device">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-laptop fs-3 text-success"></i>
+                    <div>
+                      <div class="fw-semibold">Dispositivo Atual</div>
+                      <div class="small text-muted">
+                        <span id="browserInfo">Navegador desconhecido</span> • 
+                        <span id="osInfo">Sistema desconhecido</span>
+                      </div>
+                      <div class="small text-muted">Último acesso: <span id="lastAccess">Agora</span></div>
+                    </div>
+                  </div>
+                  <span class="badge bg-success">Ativo</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="chev">
-            <i class="bi bi-chevron-right"></i>
-          </div>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-4">
+        </div>
+      </div>
+
+      <!-- Seção: Acessibilidade -->
+      <div class="settings-section">
+        <div class="settings-header p-4 d-flex align-items-center justify-content-between" data-bs-toggle="collapse" data-bs-target="#accessibilityContent">
           <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-person-standing fs-5"></i>
+            <div class="fw-semibold">Acessibilidade</div>
+          </div>
+          <i class="bi bi-chevron-right chevron-icon"></i>
+        </div>
+        <div class="collapse settings-content" id="accessibilityContent">
+          <div class="p-4 border-top">
+            <!-- V-Libras -->
+            <div class="mb-4 pb-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="fw-semibold mb-1">V-Libras</div>
+                  <div class="small text-muted">Tradutor de Libras para português</div>
+                </div>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="vlibrasSwitch"
+                         {% if profile.vlibras_enabled %}checked{% endif %}>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Tamanho de fonte -->
             <div>
-              <div class="fw-semibold"><i class="bi bi-person-standing me-2"></i>Acessibilidade</div>
+              <div class="fw-semibold mb-2">Tamanho da Fonte</div>
+              <div class="small text-muted mb-3">Ajuste o tamanho do texto em todo o site</div>
+              <div class="btn-group w-100" role="group">
+                <input type="radio" class="btn-check" name="fontSize" id="fontSmall" value="small" 
+                       {% if profile.font_size == 'small' %}checked{% endif %}>
+                <label class="btn btn-outline-primary" for="fontSmall">
+                  <i class="bi bi-type"></i> Pequeno
+                </label>
+
+                <input type="radio" class="btn-check" name="fontSize" id="fontMedium" value="medium"
+                       {% if profile.font_size == 'medium' %}checked{% endif %}>
+                <label class="btn btn-outline-primary" for="fontMedium">
+                  <i class="bi bi-type"></i> Médio
+                </label>
+
+                <input type="radio" class="btn-check" name="fontSize" id="fontLarge" value="large"
+                       {% if profile.font_size == 'large' %}checked{% endif %}>
+                <label class="btn btn-outline-primary" for="fontLarge">
+                  <i class="bi bi-type"></i> Grande
+                </label>
+              </div>
             </div>
           </div>
-          <div class="chev">
-            <i class="bi bi-chevron-right"></i>
-          </div>
-        </a>
+        </div>
       </div>
     </div>
 
@@ -115,4 +257,143 @@
     </aside>
   </div>
 </div>
+
+<script>
+// Detectar informações do dispositivo
+document.addEventListener('DOMContentLoaded', function() {
+  // Detectar navegador
+  const userAgent = navigator.userAgent;
+  let browserName = 'Navegador desconhecido';
+  
+  if (userAgent.indexOf('Firefox') > -1) {
+    browserName = 'Mozilla Firefox';
+  } else if (userAgent.indexOf('Chrome') > -1) {
+    browserName = 'Google Chrome';
+  } else if (userAgent.indexOf('Safari') > -1) {
+    browserName = 'Safari';
+  } else if (userAgent.indexOf('Edge') > -1) {
+    browserName = 'Microsoft Edge';
+  }
+  
+  // Detectar sistema operacional
+  let osName = 'Sistema desconhecido';
+  if (userAgent.indexOf('Win') > -1) osName = 'Windows';
+  else if (userAgent.indexOf('Mac') > -1) osName = 'macOS';
+  else if (userAgent.indexOf('Linux') > -1) osName = 'Linux';
+  else if (userAgent.indexOf('Android') > -1) osName = 'Android';
+  else if (userAgent.indexOf('iOS') > -1) osName = 'iOS';
+  
+  document.getElementById('browserInfo').textContent = browserName;
+  document.getElementById('osInfo').textContent = osName;
+  
+  // Animação do chevron
+  document.querySelectorAll('.settings-header').forEach(header => {
+    header.addEventListener('click', function() {
+      const chevron = this.querySelector('.chevron-icon');
+      chevron.classList.toggle('rotated');
+    });
+  });
+  
+  // Dark Mode Switch
+  const darkModeSwitch = document.getElementById('darkModeSwitch');
+  
+  if (window.darkmode && window.darkmode.isActivated()) {
+    darkModeSwitch.checked = true;
+  }
+  
+  darkModeSwitch.addEventListener('change', function() {
+    const isEnabled = this.checked;
+    
+    if (window.darkmode) {
+      if (isEnabled && !window.darkmode.isActivated()) {
+        window.darkmode.toggle();
+        location.reload(true);
+      } else if (!isEnabled && window.darkmode.isActivated()) {
+        window.darkmode.toggle();
+        location.reload(true);
+      }
+    }
+    
+    fetch('{% url "update_dark_mode" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify({
+        enabled: isEnabled
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('Preferência de modo escuro salva!');
+        location.reload();
+      }
+    })
+    .catch(error => console.error('Erro:', error));
+  });
+  
+  // V-Libras Switch
+  const vlibrasSwitch = document.getElementById('vlibrasSwitch');
+  vlibrasSwitch.addEventListener('change', function() {
+    fetch('{% url "update_vlibras" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify({
+        enabled: this.checked
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      }
+    })
+    .catch(error => console.error('Erro:', error));
+  });
+  
+  // Font Size com type radio
+  document.querySelectorAll('input[name="fontSize"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      fetch('{% url "update_font_size" %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+          font_size: this.value
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          location.reload();
+        }
+      })
+      .catch(error => console.error('Erro:', error));
+    });
+  });
+  
+  // Função pra pegar o CSRF token
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+});
+</script>
 {% endblock %}

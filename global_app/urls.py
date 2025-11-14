@@ -16,4 +16,9 @@ urlpatterns = [
     
     # Rota para curtir/descurtir posts
     path('post/<int:post_id>/like/', toggle_like, name='toggle_like'),
+    
+    # Rotas para configurações de perfil
+    path('api/update-dark-mode/', update_dark_mode, name='update_dark_mode'),
+    path('api/update-vlibras/', update_vlibras, name='update_vlibras'),
+    path('api/update-font-size/', update_font_size, name='update_font_size'),
 ]

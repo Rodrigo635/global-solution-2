@@ -8,7 +8,9 @@ from .forms import SignUpForm, PostForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.conf import settings
 from django.contrib.auth.models import User
-from .models import Post, Like
+from .models import Post, Like, Profile
+from django.views.decorators.http import require_POST
+import json
 
 def home(request):
     return render(request, 'pages/home.html')
@@ -67,6 +69,11 @@ def profile(request, username=None):
         user = request.user
 
     profile = getattr(user, 'profile', None)
+    
+    # Criar perfil se não existir
+    if not profile and user == request.user:
+        profile = Profile.objects.create(user=user)
+    
     context = {'user': user, 'profile': profile}
 
     return render(request, 'pages/profile.html', context)
@@ -134,3 +141,54 @@ def toggle_like(request, post_id):
         })
     
     return JsonResponse({'error': 'Método não permitido'}, status=405)
+
+@login_required
+@require_POST
+def update_dark_mode(request):
+    """Atualiza preferência de modo escuro"""
+    try:
+        data = json.loads(request.body)
+        enabled = data.get('enabled', False)
+        
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile.dark_mode = enabled
+        profile.save()
+        
+        return JsonResponse({'success': True, 'dark_mode': enabled})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+@login_required
+@require_POST
+def update_vlibras(request):
+    """Atualiza preferência de V-Libras"""
+    try:
+        data = json.loads(request.body)
+        enabled = data.get('enabled', False)
+        
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile.vlibras_enabled = enabled
+        profile.save()
+        
+        return JsonResponse({'success': True, 'vlibras_enabled': enabled})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+@login_required
+@require_POST
+def update_font_size(request):
+    """Atualiza preferência de tamanho de fonte"""
+    try:
+        data = json.loads(request.body)
+        font_size = data.get('font_size', 'medium')
+        
+        if font_size not in ['small', 'medium', 'large']:
+            return JsonResponse({'success': False, 'error': 'Tamanho inválido'}, status=400)
+        
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile.font_size = font_size
+        profile.save()
+        
+        return JsonResponse({'success': True, 'font_size': font_size})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)

@@ -15,6 +15,19 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     # Redes sociais com JSON
     socials = models.JSONField(default=list, blank=True)
+    
+    # Preferências de acessibilidade e configurações
+    dark_mode = models.BooleanField(default=False)
+    vlibras_enabled = models.BooleanField(default=False)
+    font_size = models.CharField(
+        max_length=10, 
+        choices=[
+            ('small', 'Pequeno'),
+            ('medium', 'Médio'),
+            ('large', 'Grande'),
+        ],
+        default='medium'
+    )
 
     def save(self, *args, **kwargs):
         if not self.uid:

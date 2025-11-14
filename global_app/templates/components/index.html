@@ -13,6 +13,39 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/index.css' %}">
+        
+        {% if user.is_authenticated and user.profile.dark_mode %}
+        <link rel="stylesheet" href="{% static 'css/darkmode.css' %}" id="darkmode-css">
+        {% endif %}
+
+        <!-- V-Libras -->
+        {% if user.is_authenticated and user.profile.vlibras_enabled %}
+        <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+        {% endif %}
+        
+        <style>
+            /* Tamanhos de fonte */
+            {% if user.is_authenticated %}
+                {% if user.profile.font_size == 'small' %}
+                    body { font-size: 0.875rem; }
+                    h1 { font-size: 2rem; }
+                    h2 { font-size: 1.75rem; }
+                    h3 { font-size: 1.5rem; }
+                    h4 { font-size: 1.25rem; }
+                    h5 { font-size: 1.1rem; }
+                    h6 { font-size: 1rem; }
+                {% elif user.profile.font_size == 'large' %}
+                    body { font-size: 1.125rem; }
+                    h1 { font-size: 2.75rem; }
+                    h2 { font-size: 2.25rem; }
+                    h3 { font-size: 1.875rem; }
+                    h4 { font-size: 1.5rem; }
+                    h5 { font-size: 1.25rem; }
+                    h6 { font-size: 1.125rem; }
+                {% endif %}
+            {% endif %}
+        </style>
+        
         {% block extra_head %}{% endblock %}
     </head>
 
@@ -66,7 +99,7 @@
         <!-- Container para notificações toast -->
         <div class="toast-container" id="toastContainer"></div>
 
-        <!-- Mensagens (escondidas, serão convertidas em toasts) -->
+        <!-- Mensagens (as escondidas, serão convertidas em toasts) -->
         {% if messages %}
         <div id="django-messages" style="display: none;">
             {% for message in messages %}
@@ -115,6 +148,19 @@
                 </div>
             </div>
         </footer>
+
+        <!-- V-Libras Widget -->
+        {% if user.is_authenticated and user.profile.vlibras_enabled %}
+        <div vw class="enabled">
+            <div vw-access-button class="active"></div>
+            <div vw-plugin-wrapper>
+                <div class="vw-plugin-top-wrapper"></div>
+            </div>
+        </div>
+        <script>
+            new window.VLibras.Widget('https://vlibras.gov.br/app');
+        </script>
+        {% endif %}
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="{% static 'js/toast-notifications.js' %}"></script>
