@@ -23,8 +23,8 @@
         <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
         {% endif %}
         
+        <!-- Tamanho da fonte -->
         <style>
-            /* Tamanhos de fonte */
             {% if user.is_authenticated %}
                 {% if user.profile.font_size == 'small' %}
                     body { font-size: 0.875rem; }
@@ -54,17 +54,17 @@
             <div class="container">
                 {% if user.is_authenticated %}
                     <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'feed' %}">
-                        <div class="me-2 p-2 rounded-3" style="background:linear-gradient(135deg,var(--primary),var(--accent)); width:44px; height:44px; display:grid; place-items:center; color:white">
-                            GS
+                        <div class="p-0 me-1 rounded-3 d-flex align-items-center justify-content-center" style="background:linear-gradient(135deg,var(--primary),var(--accent)); width:44px; height:44px; display:grid; place-items:center; color:white">
+                            <h1 class="display-6 m-0 fw-semibold">C</h1>
                         </div>
-                        <span>Global Solution</span>
+                        <span><h4 class="m-0">onnecta</h4></span>
                     </a>
                 {% else %}
                     <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'home' %}">
                         <div class="me-2 p-2 rounded-3" style="background:linear-gradient(135deg,var(--primary),var(--accent)); width:44px; height:44px; display:grid; place-items:center; color:white">
                             GS
                         </div>
-                        <span>Global Solution</span>
+                        <span><h4 class="m-0">onnecta</h4></span>
                     </a>
                 {% endif %}
 
@@ -78,9 +78,9 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'feed' %}">Início</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'calls' %}">Chamadas</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Vagas</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Pedidos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Demandas</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Amigos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Work AI</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'work_ai' %}">Work AI</a></li>
                             <li class="nav-item ms-0 ms-md-2 mb-3 mb-lg-0"><a href="{% url 'my_profile' %}" class="user-nav-item"><i class="bi bi-person-fill fs-5"></i></a></li>
                         {% else %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Início</a></li>
@@ -117,7 +117,7 @@
                 <div class="row text-center text-md-start">
                     <div class="col-md-4">
                         <a href="{% url 'home' %}">
-                            <h5 class="text-white">Global Solution</h5>
+                            <h5 class="text-white">Connecta</h5>
                         </a>
                         <p class="small">Reinventando sua forma de fazer networking e acelerando sua carreira e contratações.</p>
                     </div>

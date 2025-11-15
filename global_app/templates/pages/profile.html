@@ -4,55 +4,7 @@
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-<style>
-  .settings-section {
-    border: 1px solid var(--bs-border-color);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
-  
-  .settings-header {
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.2s;
-  }
-  
-  .settings-header:hover {
-    background-color: var(--bs-secondary-bg);
-  }
-  
-  .settings-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-  }
-  
-  .settings-content.show {
-    max-height: 1000px;
-    transition: max-height 0.5s ease-in;
-  }
-  
-  .chevron-icon {
-    transition: transform 0.3s;
-  }
-  
-  .chevron-icon.rotated {
-    transform: rotate(90deg);
-  }
-  
-  .device-card {
-    border: 1px solid var(--bs-border-color);
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .current-device {
-    border-color: var(--bs-success);
-    background-color: var(--bs-success-bg-subtle);
-  }
-</style>
+
 {% endblock %}
 
 {% block content %}

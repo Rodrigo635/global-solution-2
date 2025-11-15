@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', logout, name='logout'),
     path('profile/', profile, name='my_profile'),
     path('profile/<str:username>/', profile, name='public_profile'),
+    path('work_ai/', work_ai, name='work_ai'),
 
     path('feed/', feed, name='feed'),
     path('calls/', calls, name='calls'),

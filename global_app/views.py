@@ -192,3 +192,7 @@ def update_font_size(request):
         return JsonResponse({'success': True, 'font_size': font_size})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    
+@login_required
+def work_ai(request):
+    return render(request, 'pages/work_ai.html')

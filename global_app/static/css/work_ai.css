@@ -1,0 +1,23 @@
+/* Chat */
+.chat-container {
+  height: 70vh;
+  max-height: 85vh;
+  background-color: var(--bs-body-bg);
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Chat com rolagem */
+.chat-body {
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+/* Input fixo ao fundo */
+.chat-input {
+  background-color: var(--bs-body-bg);
+  flex-shrink: 0;
+}
