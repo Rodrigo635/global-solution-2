@@ -1,0 +1,302 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/friends.css' %}">
+{% endblock %}
+
+{% block content %}
+<section>
+  <div class="container py-5">
+    <div class="row g-4">
+    
+        <!-- Sidebar de Navegação -->
+        <div class="col-12 col-md-4">
+            <div class="feature-card p-3 d-flex flex-column friends-sidebar">
+                <h5 class="mb-3">Amigos</h5>
+                
+                <div class="list-group">
+                    <a href="#lista-amigos" class="list-group-item list-group-item-action active" id="link-lista">
+                        <i class="bi bi-people-fill me-2"></i>Lista de amigos
+                    </a>
+                    <a href="#solicitacoes" class="list-group-item list-group-item-action" id="link-solicitacoes">
+                        <i class="bi bi-person-plus-fill me-2"></i>Solicitações
+                        {% if received_requests %}
+                            <span class="badge bg-white text-black rounded-pill ms-auto">{{ received_requests|length }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="#configuracoes" class="list-group-item list-group-item-action" id="link-configuracoes">
+                        <i class="bi bi-gear-fill me-2"></i>Configurações
+                    </a>
+                </div>
+
+                <div class="border border-bottom-secondary mt-3 mb-3"></div>
+
+                <h6 class="mb-2 text-muted small">Mensagens diretas</h6>
+                <div class="direct-messages-list flex-grow-1">
+                    <div class="text-muted small text-center py-3">Nenhuma conversa ainda</div>
+                </div>
+            </div>
+        </div>
+      
+        <!-- Conteúdo Principal -->
+        <div class="col-12 col-md-8">
+            <div class="feature-card p-0 d-flex flex-column friends-content-container">
+          
+                <!-- Seção: Lista de Amigos -->
+                <div id="lista-amigos" class="content-section active">
+                    <div class="content-header d-flex justify-content-between align-items-center p-3 border-bottom">
+                        <h5 class="mb-0">Lista de amigos</h5>
+                        <button class="btn btn-outline-primary" onclick="openSearchModal()">
+                            <i class="bi bi-search me-2"></i>Buscar amigo
+                        </button>
+                    </div>
+
+                    <div class="content-body p-4">
+                        <!-- Estado: Online -->
+                        <div class="mb-4">
+                            <h6 class="text-muted mb-3">Online - {{ online_friends|length }}</h6>
+                            {% if online_friends %}
+                                {% for friend in online_friends %}
+                                <div class="friend-card p-3 mb-2 border rounded d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="position-relative">
+                                            {% if friend.profile and friend.profile.avatar %}
+                                                <img src="{{ friend.profile.avatar.url }}" alt="avatar" class="rounded-2" style="width:50px; height:50px; object-fit:cover;">
+                                            {% else %}
+                                                <div class="rounded-2 bg-primary text-white d-flex align-items-center justify-content-center" style="width:50px; height:50px;">
+                                                    <i class="bi bi-person-fill"></i>
+                                                </div>
+                                            {% endif %}
+                                            <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle" style="width:12px; height:12px;"></span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold">{{ friend.get_full_name|default:friend.username }}</div>
+                                            <div class="text-muted small">Online</div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'public_profile' friend.username %}"><i class="bi bi-person me-2"></i>Ver perfil</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" onclick="removeFriend({{ friend.id }}, '{{ friend.get_full_name|default:friend.username|escapejs }}'); return false;"><i class="bi bi-person-x me-2"></i>Remover amigo</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state text-center py-4">
+                                    <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
+                                    <p class="text-muted mt-1 mb-0">Nenhum amigo online no momento</p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="border-bottom mb-4"></div>
+
+                        <!-- Estado: Offline -->
+                        <div>
+                            <h6 class="text-muted mb-3">Offline - {{ offline_friends|length }}</h6>
+                            {% if offline_friends %}
+                                {% for friend in offline_friends %}
+                                <div class="friend-card p-3 mb-2 border rounded d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if friend.profile and friend.profile.avatar %}
+                                            <img src="{{ friend.profile.avatar.url }}" alt="avatar" class="rounded-2" style="width:50px; height:50px; object-fit:cover;">
+                                        {% else %}
+                                            <div class="rounded-2 bg-secondary text-white d-flex align-items-center justify-content-center" style="width:50px; height:50px;">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <div class="fw-semibold">{{ friend.get_full_name|default:friend.username }}</div>
+                                            <div class="text-muted small">Offline</div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'public_profile' friend.username %}"><i class="bi bi-person me-2"></i>Ver perfil</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" onclick="removeFriend({{ friend.id }}, '{{ friend.get_full_name|default:friend.username|escapejs }}'); return false;"><i class="bi bi-person-x me-2"></i>Remover amigo</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state text-center py-4">
+                                    <i class="bi bi-person-x text-muted" style="font-size: 3rem;"></i>
+                                    <p class="text-muted mt-1 mb-0">Você ainda não possui amigos</p>
+                                    <p class="text-muted small">Comece enviando solicitações de amizade!</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção: Solicitações -->
+                <div id="solicitacoes" class="content-section">
+                    <div class="content-header d-flex justify-content-between align-items-center p-3 border-bottom">
+                        <h5 class="mb-0">Solicitações de amizade</h5>
+                        <button class="btn btn-outline-primary" onclick="openSearchModal()">
+                            <i class="bi bi-search me-2"></i>Buscar usuário
+                        </button>
+                    </div>
+
+                    <div class="content-body p-4">
+                        <!-- Solicitações Recebidas -->
+                        <div class="mb-4">
+                            <h6 class="text-muted mb-3">Recebidas - {{ received_requests|length }}</h6>
+                            {% if received_requests %}
+                                {% for request in received_requests %}
+                                <div class="request-card p-3 mb-2 border rounded">
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if request.from_user.profile and request.from_user.profile.avatar %}
+                                            <img src="{{ request.from_user.profile.avatar.url }}" alt="avatar" class="rounded-2" style="width:50px; height:50px; object-fit:cover;">
+                                        {% else %}
+                                            <div class="rounded-2 bg-primary text-white d-flex align-items-center justify-content-center" style="width:50px; height:50px;">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">{{ request.from_user.get_full_name|default:request.from_user.username }}</div>
+                                            <div class="text-muted small">@{{ request.from_user.username }}</div>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-success" onclick="acceptRequest({{ request.id }})">
+                                                <i class="bi bi-check-lg me-1"></i>Aceitar
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="rejectRequest({{ request.id }})">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state text-center py-4">
+                                    <i class="bi bi-inbox text-muted" style="font-size: 2.5rem;"></i>
+                                    <p class="text-muted mt-1 mb-0">Nenhuma solicitação recebida</p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="border-bottom mb-4"></div>
+
+                        <!-- Solicitações Enviadas -->
+                        <div>
+                            <h6 class="text-muted mb-3">Enviadas - {{ sent_requests|length }}</h6>
+                            {% if sent_requests %}
+                                {% for request in sent_requests %}
+                                <div class="request-card p-3 mb-2 border rounded">
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if request.to_user.profile and request.to_user.profile.avatar %}
+                                            <img src="{{ request.to_user.profile.avatar.url }}" alt="avatar" class="rounded-2" style="width:50px; height:50px; object-fit:cover;">
+                                        {% else %}
+                                            <div class="rounded-2 bg-primary text-white d-flex align-items-center justify-content-center" style="width:50px; height:50px;">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">{{ request.to_user.get_full_name|default:request.to_user.username }}</div>
+                                            <div class="text-muted small">@{{ request.to_user.username }}</div>
+                                        </div>
+                                        <button class="btn btn-outline-secondary" onclick="cancelRequest({{ request.id }})">
+                                            <i class="bi bi-x-lg me-2"></i>Cancelar
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state text-center py-4">
+                                    <i class="bi bi-send text-muted" style="font-size: 2.5rem;"></i>
+                                    <p class="text-muted mt-1 mb-0">Nenhuma solicitação enviada</p>
+                                    <p class="text-muted small">Procure por usuários para adicionar como amigos</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção: Configurações -->
+                <div id="configuracoes" class="content-section">
+                    <div class="content-header p-3 border-bottom">
+                        <h5 class="mb-0">Configurações de amizade</h5>
+                    </div>
+
+                    <div class="content-body p-4">
+                        <div class="settings-group mb-4">
+                            <h6 class="mb-3">Privacidade</h6>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="allowRequests" checked>
+                                <label class="form-check-label" for="allowRequests">
+                                    Permitir solicitações de amizade
+                                </label>
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="showOnline" checked>
+                                <label class="form-check-label" for="showOnline">
+                                    Mostrar quando estou online
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="border-bottom mb-4"></div>
+
+                        <div class="settings-group">
+                            <h6 class="mb-3">Notificações</h6>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="notifyRequests" checked>
+                                <label class="form-check-label" for="notifyRequests">
+                                    Notificar novas solicitações
+                                </label>
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="notifyMessages" checked>
+                                <label class="form-check-label" for="notifyMessages">
+                                    Notificar mensagens diretas
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Modal de Busca de Usuários -->
+<div class="modal fade" id="searchModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Buscar usuários</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Digite o nome ou username...">
+                </div>
+                <div id="searchResults">
+                    <div class="text-center text-muted py-3">
+                        <i class="bi bi-search" style="font-size: 2rem;"></i>
+                        <p class="mt-2 mb-0">Digite para buscar usuários</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/friends.js' %}"></script>
+
+{% endblock %}

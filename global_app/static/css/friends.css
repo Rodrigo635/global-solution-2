@@ -1,0 +1,144 @@
+/* Container da página de amigos */
+.friends-sidebar {
+  height: 70vh;
+  max-height: 85vh;
+  background-color: var(--bs-body-bg);
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.friends-content-container {
+  background-color: var(--bs-body-bg);
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navegação sidebar */
+.list-group-item {
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 0.25rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.list-group-item:hover {
+  background-color: rgba(13, 110, 253, 0.08);
+}
+
+.list-group-item.active {
+  background-color: var(--primary) !important;
+}
+
+/* Lista de mensagens diretas */
+.direct-messages-list {
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* Seções de conteúdo */
+.content-section {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content-section.active {
+  display: flex;
+}
+
+.content-header {
+  flex-shrink: 0;
+}
+
+.content-body {
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+/* Estado vazio */
+.empty-state {
+  opacity: 0.7;
+}
+
+.empty-state i {
+  opacity: 0.5;
+}
+
+/* Grupos de configurações */
+.settings-group h6 {
+  font-weight: 600;
+}
+
+.form-check-label {
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Responsividade */
+@media (max-width: 767px) {
+  .friends-sidebar,
+  .friends-content-container {
+    height: auto;
+    min-height: 50vh;
+  }
+  
+  .friends-sidebar {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Scrollbar personalizada */
+.content-body::-webkit-scrollbar,
+.direct-messages-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content-body::-webkit-scrollbar-track,
+.direct-messages-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content-body::-webkit-scrollbar-thumb,
+.direct-messages-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.content-body::-webkit-scrollbar-thumb:hover,
+.direct-messages-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Modal de busca */
+#searchResults {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#searchResults::-webkit-scrollbar {
+  width: 6px;
+}
+
+#searchResults::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Sticky para friends-sidebar */
+@media (min-width: 768px) {
+    .friends-sidebar {
+        position: sticky;
+        z-index: 1;
+        top: 100px;
+    }
+}

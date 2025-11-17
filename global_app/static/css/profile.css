@@ -15,6 +15,7 @@
     align-items: center;
     justify-content: center;
     overflow: hidden; 
+    position: relative;
 }
 
 .icon-perfil {
@@ -59,6 +60,11 @@
     padding: 1rem;
     min-width: 160px;
     box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease;
+}
+
+.quick-box:hover {
+    transform: translateY(-2px);
 }
 
 /* lista items */
@@ -156,4 +162,13 @@ aside .feature-card {
 .current-device {
     border-color: var(--bs-success);
     background-color: var(--bs-success-bg-subtle);
+}
+
+/* Botão de like nos posts */
+.btn-like {
+    transition: all 0.2s ease;
+}
+
+.btn-like:hover {
+    transform: scale(1.05);
 }

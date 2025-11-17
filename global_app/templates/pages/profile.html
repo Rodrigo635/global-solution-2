@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
+
+<section class="container py-5">
   <!-- Card principal do perfil -->
   <div class="feature-card p-5 mb-4 profile-header position-relative">
     <div class="row g-3 align-items-center justify-content-center">
@@ -194,10 +195,11 @@
     <aside class="col-lg-4">
       <div class="feature-card p-4 mb-4">
         <ul class="list-unstyled mb-0">
-          <li><h6 class="mb-2">Ações</h6></li>
+          <li><h6 class="mb-2">Ações do perfil</h6></li>
+          <li><a href="#" class="d-block py-2 text-decoration-none">Tornar-se mentor</a></li>
           <li><a href="#" class="d-block py-2 text-decoration-none">Trocar de conta</a></li>
           <li><a href="#" class="d-block py-2 text-decoration-none">Ajuda</a></li>
-          <li><a href="{% url 'logout' %}" class="d-block py-2 text-decoration-none text-danger">Sair</a></li>
+          <li><a href="{% url 'logout' %}" class="d-block py-2 text-decoration-none text-danger">Sair da conta</a></li>
         </ul>
       </div>
 
@@ -208,7 +210,7 @@
       </div>
     </aside>
   </div>
-</div>
+</section>
 
 <script>
 // Detectar informações do dispositivo

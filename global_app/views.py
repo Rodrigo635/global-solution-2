@@ -8,7 +8,8 @@ from .forms import SignUpForm, PostForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.conf import settings
 from django.contrib.auth.models import User
-from .models import Post, Like, Profile
+from .models import Post, Like, Profile, Friendship, FriendRequest
+from django.db.models import Q
 from django.views.decorators.http import require_POST
 import json
 
@@ -61,26 +62,108 @@ def logout(request):
 
 @login_required
 def profile(request, username=None):
+    """View do perfil - renderiza template diferente para perfil próprio vs público"""
+    
     # Se username não informado, mostra o perfil do usuário logado
     if username:
-        # Ver o perfil público
+        # Ver o perfil público de outro usuário
         user = get_object_or_404(User, username=username)
+        is_own_profile = (user == request.user)
     else:
+        # Perfil próprio
         user = request.user
+        is_own_profile = True
 
     profile = getattr(user, 'profile', None)
     
-    # Criar perfil se não existir
-    if not profile and user == request.user:
+    # Criar perfil se não existir (apenas para o próprio usuário)
+    if not profile and is_own_profile:
         profile = Profile.objects.create(user=user)
     
-    context = {'user': user, 'profile': profile}
-
-    return render(request, 'pages/profile.html', context)
+    # Se é o próprio perfil, renderiza o template de perfil próprio
+    if is_own_profile:
+        context = {'user': user, 'profile': profile}
+        return render(request, 'pages/profile.html', context)
+    
+    # Se não é o próprio perfil, renderiza o template de perfil público
+    # Verificar status de amizade
+    is_friend = Friendship.objects.filter(user=request.user, friend=user).exists()
+    
+    # Verificar se existe solicitação pendente
+    friend_request = FriendRequest.objects.filter(
+        Q(from_user=request.user, to_user=user) | 
+        Q(from_user=user, to_user=request.user),
+        status='pending'
+    ).first()
+    
+    friendship_status = 'none'
+    friend_request_id = None
+    
+    if is_friend:
+        friendship_status = 'friend'
+    elif friend_request:
+        if friend_request.from_user == request.user:
+            friendship_status = 'request_sent'
+        else:
+            friendship_status = 'request_received'
+        friend_request_id = friend_request.id
+    
+    # Buscar posts do usuário
+    user_posts = Post.objects.filter(author=user).select_related('author', 'author__profile').prefetch_related('likes')[:10]
+    
+    # Adicionar informação se o usuário curtiu cada post
+    for post in user_posts:
+        post.user_has_liked = post.likes.filter(user=request.user).exists()
+    
+    # Contar amigos do usuário
+    friends_count = Friendship.objects.filter(user=user).count()
+    
+    # Buscar amigos em comum
+    user_friends = Friendship.objects.filter(user=user).values_list('friend_id', flat=True)
+    my_friends = Friendship.objects.filter(user=request.user).values_list('friend_id', flat=True)
+    mutual_friend_ids = set(user_friends).intersection(set(my_friends))
+    mutual_friends = User.objects.filter(id__in=mutual_friend_ids).select_related('profile')[:10]
+    
+    context = {
+        'user': user,
+        'profile': profile,
+        'is_own_profile': is_own_profile,
+        'friendship_status': friendship_status,
+        'friend_request_id': friend_request_id,
+        'user_posts': user_posts,
+        'user_posts_count': user_posts.count(),
+        'friends_count': friends_count,
+        'mutual_friends': mutual_friends,
+    }
+    
+    return render(request, 'pages/public_profile.html', context)
 
 @login_required
 def feed(request):
-    suggested_users = User.objects.exclude(id=request.user.id).select_related('profile')[:5]
+    # Buscar usuários sugeridos excluindo:
+    # - O próprio usuário
+    # - Usuários que já são amigos
+    # - Usuários com solicitação pendente
+    
+    # IDs dos amigos atuais
+    friend_ids = Friendship.objects.filter(user=request.user).values_list('friend_id', flat=True)
+    
+    # IDs de usuários com solicitação pendente (enviada ou recebida)
+    pending_request_ids = list(FriendRequest.objects.filter(
+        Q(from_user=request.user) | Q(to_user=request.user),
+        status='pending'
+    ).values_list('to_user_id', 'from_user_id'))
+    
+    # Flatten a lista de tuplas e remover duplicatas
+    pending_ids = set()
+    for id_tuple in pending_request_ids:
+        pending_ids.update(id_tuple)
+    pending_ids.discard(request.user.id)  # Remover o próprio usuário se estiver
+    
+    # Buscar usuários que NÃO são amigos e NÃO têm solicitação pendente
+    suggested_users = User.objects.exclude(
+        id__in=list(friend_ids) + list(pending_ids) + [request.user.id]
+    ).select_related('profile').order_by('?')[:5]
     
     # Buscar todos os posts (ordenados por data)
     posts = Post.objects.select_related('author', 'author__profile').prefetch_related('likes')
@@ -192,7 +275,225 @@ def update_font_size(request):
         return JsonResponse({'success': True, 'font_size': font_size})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
-    
+
 @login_required
 def work_ai(request):
     return render(request, 'pages/work_ai.html')
+
+@login_required
+def friends(request):
+    """View principal da página de amigos"""
+    # Buscar todos os amigos do usuário
+    friendships = Friendship.objects.filter(user=request.user).select_related('friend', 'friend__profile')
+    friends_list = [f.friend for f in friendships]
+    
+    # Separar amigos online e offline baseado no status real
+    online_friends = []
+    offline_friends = []
+    
+    for friend in friends_list:
+        # Verificar se o amigo tem profile e se está online
+        if hasattr(friend, 'profile') and friend.profile and friend.profile.is_online():
+            online_friends.append(friend)
+        else:
+            offline_friends.append(friend)
+    
+    # Buscar solicitações recebidas pendentes
+    received_requests = FriendRequest.objects.filter(
+        to_user=request.user, 
+        status='pending'
+    ).select_related('from_user', 'from_user__profile')
+    
+    # Buscar solicitações enviadas pendentes
+    sent_requests = FriendRequest.objects.filter(
+        from_user=request.user, 
+        status='pending'
+    ).select_related('to_user', 'to_user__profile')
+    
+    context = {
+        'online_friends': online_friends,
+        'offline_friends': offline_friends,
+        'received_requests': received_requests,
+        'sent_requests': sent_requests,
+    }
+    
+    return render(request, 'pages/friends.html', context)
+
+
+@login_required
+@require_POST
+def send_friend_request(request, user_id):
+    """Envia uma solicitação de amizade"""
+    try:
+        to_user = get_object_or_404(User, id=user_id)
+        
+        # Verificar se não está tentando adicionar a si mesmo
+        if to_user == request.user:
+            return JsonResponse({'success': False, 'error': 'Você não pode adicionar a si mesmo'}, status=400)
+        
+        # Verificar se já são amigos
+        if Friendship.objects.filter(user=request.user, friend=to_user).exists():
+            return JsonResponse({'success': False, 'error': 'Vocês já são amigos'}, status=400)
+        
+        # Verificar se já existe uma solicitação pendente
+        existing_request = FriendRequest.objects.filter(
+            Q(from_user=request.user, to_user=to_user) | 
+            Q(from_user=to_user, to_user=request.user),
+            status='pending'
+        ).first()
+        
+        if existing_request:
+            return JsonResponse({'success': False, 'error': 'Já existe uma solicitação pendente'}, status=400)
+        
+        # Criar solicitação
+        friend_request = FriendRequest.objects.create(
+            from_user=request.user,
+            to_user=to_user
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Solicitação enviada com sucesso',
+            'request_id': friend_request.id
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+@require_POST
+def accept_friend_request(request, request_id):
+    """Aceita uma solicitação de amizade"""
+    try:
+        friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
+        
+        if friend_request.status != 'pending':
+            return JsonResponse({'success': False, 'error': 'Esta solicitação já foi processada'}, status=400)
+        
+        # Aceitar solicitação (cria amizade bidirecional)
+        friend_request.accept()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Solicitação aceita com sucesso'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+@require_POST
+def reject_friend_request(request, request_id):
+    """Rejeita uma solicitação de amizade"""
+    try:
+        friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
+        
+        if friend_request.status != 'pending':
+            return JsonResponse({'success': False, 'error': 'Esta solicitação já foi processada'}, status=400)
+        
+        friend_request.reject()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Solicitação rejeitada'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+@require_POST
+def cancel_friend_request(request, request_id):
+    """Cancela uma solicitação enviada"""
+    try:
+        friend_request = get_object_or_404(FriendRequest, id=request_id, from_user=request.user)
+        
+        if friend_request.status != 'pending':
+            return JsonResponse({'success': False, 'error': 'Esta solicitação já foi processada'}, status=400)
+        
+        friend_request.cancel()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Solicitação cancelada'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+@require_POST
+def remove_friend(request, user_id):
+    """Remove um amigo"""
+    try:
+        friend = get_object_or_404(User, id=user_id)
+        
+        # Remover amizade bidirecional
+        Friendship.objects.filter(user=request.user, friend=friend).delete()
+        Friendship.objects.filter(user=friend, friend=request.user).delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Amigo removido com sucesso'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+def search_users(request):
+    """Busca usuários para adicionar como amigos"""
+    query = request.GET.get('q', '').strip()
+    
+    if not query:
+        return JsonResponse({'users': []})
+    
+    # Buscar usuários excluindo o próprio usuário
+    users = User.objects.filter(
+        Q(username__icontains=query) | 
+        Q(first_name__icontains=query) | 
+        Q(last_name__icontains=query)
+    ).exclude(id=request.user.id).select_related('profile')[:10]
+    
+    # Verificar status de amizade para cada usuário
+    results = []
+    for user in users:
+        # Verificar se já são amigos
+        is_friend = Friendship.objects.filter(user=request.user, friend=user).exists()
+        
+        # Verificar se existe solicitação pendente
+        pending_request = FriendRequest.objects.filter(
+            Q(from_user=request.user, to_user=user) | 
+            Q(from_user=user, to_user=request.user),
+            status='pending'
+        ).first()
+        
+        status = 'none'
+        request_id = None
+        
+        if is_friend:
+            status = 'friend'
+        elif pending_request:
+            if pending_request.from_user == request.user:
+                status = 'sent'
+                request_id = pending_request.id
+            else:
+                status = 'received'
+                request_id = pending_request.id
+        
+        results.append({
+            'id': user.id,
+            'username': user.username,
+            'full_name': user.get_full_name() or user.username,
+            'avatar': user.profile.avatar.url if user.profile and user.profile.avatar else None,
+            'bio': user.profile.bio if user.profile else '',
+            'status': status,
+            'request_id': request_id
+        })
+    
+    return JsonResponse({'users': results})

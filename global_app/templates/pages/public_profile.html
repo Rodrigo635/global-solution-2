@@ -1,0 +1,399 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="container py-5">
+  <!-- Card principal do perfil -->
+  <div class="feature-card p-5 mb-4 profile-header position-relative">
+    <div class="row g-3 align-items-center">
+      <div class="col-12 col-md-auto">
+        <div class="avatar-lg overflow-hidden rounded-3 mx-auto position-relative">
+          {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="avatar" class="img-fluid">
+          {% else %}
+            <i class="bi bi-person-fill text-white icon-perfil"></i>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="small text-muted text-center text-md-start">Perfil de</div>
+        <div class="h4 mb-0 fw-bold text-center text-md-start">{{ user.get_full_name|default:user.username }}</div>
+        <div class="small text-muted text-center text-md-start">@{{ user.username }} • #{{ profile.uid|default:user.id }}</div>
+
+        <!-- Bio do usuário -->
+        {% if profile.bio %}
+        <div class="mt-2 text-center text-md-start">
+          <p class="mb-2">{{ profile.bio }}</p>
+        </div>
+        {% endif %}
+
+        <div class="mt-3 d-flex align-items-center gap-2 justify-content-center justify-content-md-start">
+          <!-- Redes sociais -->
+          {% for social in profile.socials %}
+            <a href="{{ social.url }}" class="d-inline-flex align-items-center justify-content-center social-dot" target="_blank" rel="noopener">
+              <i class="{{ social.icon_class }}"></i>
+            </a>
+          {% empty %}
+            <div class="social-dot-placeholder d-flex gap-2">
+              <span class="social-dot d-flex align-items-center justify-content-center text-muted fs-5"><i class="bi bi-facebook"></i></span>
+              <span class="social-dot d-flex align-items-center justify-content-center text-muted fs-5"><i class="bi bi-instagram"></i></span>
+              <span class="social-dot d-flex align-items-center justify-content-center text-muted fs-5"><i class="bi bi-linkedin"></i></span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-auto mx-auto ms-md-auto d-flex flex-column gap-2">
+        <!-- Botões de ação baseados no status de amizade -->
+        {% if friendship_status == 'friend' %}
+          <button class="btn btn-success" disabled>
+            <i class="bi bi-check-circle me-2"></i>Amigos
+          </button>
+          <button class="btn btn-outline-danger" onclick="removeFriend({{ user.id }}, '{{ user.get_full_name|default:user.username|escapejs }}')">
+            <i class="bi bi-person-x me-2"></i>Remover amigo
+          </button>
+        {% elif friendship_status == 'request_sent' %}
+          <button class="btn btn-secondary" disabled>
+            <i class="bi bi-clock me-2"></i>Solicitação enviada
+          </button>
+          <button class="btn btn-outline-secondary" onclick="cancelRequest({{ friend_request_id }})">
+            Cancelar
+          </button>
+        {% elif friendship_status == 'request_received' %}
+          <button class="btn btn-primary" onclick="acceptRequest({{ friend_request_id }})">
+            <i class="bi bi-check-lg me-2"></i>Aceitar solicitação
+          </button>
+          <button class="btn btn-outline-danger" onclick="rejectRequest({{ friend_request_id }})">
+            Rejeitar
+          </button>
+        {% else %}
+          <button class="btn btn-primary" onclick="sendFriendRequest({{ user.id }}, '{{ user.get_full_name|default:user.username|escapejs }}', this)">
+            <i class="bi bi-person-plus me-2"></i>Adicionar amigo
+          </button>
+        {% endif %}
+        
+        <a href="#" class="btn btn-outline-primary">
+          <i class="bi bi-chat-dots me-2"></i>Enviar mensagem
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Coluna principal -->
+    <div class="col-lg-8">
+      <!-- Abas do perfil -->
+      <div class="d-flex gap-3 mb-4 flex-wrap">
+        <div class="quick-box flex-fill p-4">
+          <i class="bi bi-chat-fill text-primary me-2"></i>
+          <span class="fw-semibold">{{ user_posts_count }}</span> Postagens
+        </div>
+        <div class="quick-box flex-fill p-4">
+          <i class="bi bi-people-fill text-success me-2"></i>
+          <span class="fw-semibold">{{ friends_count }}</span> Amigos
+        </div>
+        <div class="quick-box flex-fill p-4">
+          <i class="bi bi-clock-history text-info me-2"></i>
+          Membro desde {{ user.date_joined|date:"M/Y" }}
+        </div>
+      </div>
+
+      <!-- Postagens do usuário -->
+      <h6 class="mb-3">Postagens de {{ user.get_full_name|default:user.username }}</h6>
+      
+      {% if user_posts %}
+        {% for post in user_posts %}
+        <div class="feature-card p-4 mb-3">
+          <div class="d-flex gap-3 mb-3">
+            <div class="flex-shrink-0">
+              {% if post.author.profile and post.author.profile.avatar %}
+                <img src="{{ post.author.profile.avatar.url }}" alt="avatar" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
+              {% else %}
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width:50px; height:50px;">
+                  <i class="bi bi-person-fill"></i>
+                </div>
+              {% endif %}
+            </div>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ post.author.get_full_name|default:post.author.username }}</div>
+              <div class="small text-muted">{{ post.created_at|timesince }} atrás</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <p class="mb-0">{{ post.content }}</p>
+          </div>
+
+          {% if post.image %}
+          <div class="mb-3">
+            <img src="{{ post.image.url }}" alt="Post image" class="img-fluid rounded" style="max-height:500px; width:100%; object-fit:cover;">
+          </div>
+          {% endif %}
+
+          <div class="border-top pt-3">
+            <button 
+              class="btn btn-sm btn-like {% if post.user_has_liked %}btn-danger{% else %}btn-outline-danger{% endif %}" 
+              data-post-id="{{ post.id }}"
+              onclick="toggleLike({{ post.id }})">
+              <i class="bi {% if post.user_has_liked %}bi-heart-fill{% else %}bi-heart{% endif %}" id="like-icon-{{ post.id }}"></i>
+              <span id="like-count-{{ post.id }}">{{ post.total_likes }}</span>
+              <span class="d-none d-sm-inline">curtida{{ post.total_likes|pluralize }}</span>
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="feature-card p-5 text-center">
+          <i class="bi bi-chat-square-text display-1 text-muted"></i>
+          <h5 class="mt-3">Nenhuma publicação</h5>
+          <p class="text-muted">{{ user.get_full_name|default:user.username }} ainda não publicou nada.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Painel lateral -->
+    <aside class="col-lg-4">
+      <!-- Amigos em comum -->
+      {% if mutual_friends %}
+      <div class="feature-card p-4 mb-4">
+        <h6 class="mb-3">Amigos em comum ({{ mutual_friends|length }})</h6>
+        <div class="d-flex flex-wrap gap-2">
+          {% for friend in mutual_friends|slice:":6" %}
+          <a href="{% url 'public_profile' friend.username %}" class="text-decoration-none" title="{{ friend.get_full_name|default:friend.username }}">
+            {% if friend.profile and friend.profile.avatar %}
+              <img src="{{ friend.profile.avatar.url }}" alt="avatar" class="rounded-circle" style="width:40px; height:40px; object-fit:cover;">
+            {% else %}
+              <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                <i class="bi bi-person-fill small"></i>
+              </div>
+            {% endif %}
+          </a>
+          {% endfor %}
+          {% if mutual_friends|length > 6 %}
+          <div class="rounded-circle bg-light text-muted d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+            <small>+{{ mutual_friends|length|add:"-6" }}</small>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Ações -->
+      <div class="feature-card p-4">
+        <h6 class="mb-3">Ações</h6>
+        <ul class="list-unstyled mb-0">
+          <li><a href="#" class="d-block py-2 text-decoration-none text-danger"><i class="bi bi-flag me-2"></i>Denunciar perfil</a></li>
+          <li><a href="#" class="d-block py-2 text-decoration-none text-danger"><i class="bi bi-slash-circle me-2"></i>Bloquear usuário</a></li>
+          <li><a href="#" class="d-block py-2 text-decoration-none"><i class="bi bi-share me-2"></i>Compartilhar perfil</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+// Obter CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+// Enviar solicitação de amizade
+async function sendFriendRequest(userId, userName, buttonElement) {
+    buttonElement.disabled = true;
+    buttonElement.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Enviando...';
+    
+    try {
+        const response = await fetch(`/api/friends/request/send/${userId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showToast('success', `Solicitação enviada para ${userName}!`);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('error', data.error || 'Erro ao enviar solicitação');
+            buttonElement.disabled = false;
+            buttonElement.innerHTML = '<i class="bi bi-person-plus me-2"></i>Adicionar amigo';
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        showToast('error', 'Erro ao enviar solicitação');
+        buttonElement.disabled = false;
+        buttonElement.innerHTML = '<i class="bi bi-person-plus me-2"></i>Adicionar amigo';
+    }
+}
+
+// Aceitar solicitação
+async function acceptRequest(requestId) {
+    try {
+        const response = await fetch(`/api/friends/request/accept/${requestId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showToast('success', data.message);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('error', data.error);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        showToast('error', 'Erro ao aceitar solicitação');
+    }
+}
+
+// Rejeitar solicitação
+async function rejectRequest(requestId) {
+    try {
+        const response = await fetch(`/api/friends/request/reject/${requestId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showToast('success', data.message);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('error', data.error);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        showToast('error', 'Erro ao rejeitar solicitação');
+    }
+}
+
+// Cancelar solicitação
+async function cancelRequest(requestId) {
+    try {
+        const response = await fetch(`/api/friends/request/cancel/${requestId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showToast('success', data.message);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('error', data.error);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        showToast('error', 'Erro ao cancelar solicitação');
+    }
+}
+
+// Remover amigo
+async function removeFriend(userId, friendName) {
+    if (!confirm(`Deseja realmente remover ${friendName} dos seus amigos?`)) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/friends/remove/${userId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showToast('success', data.message);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('error', data.error);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        showToast('error', 'Erro ao remover amigo');
+    }
+}
+
+// Toggle like
+async function toggleLike(postId) {
+    try {
+        const response = await fetch(`/post/${postId}/like/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const data = await response.json();
+        
+        const icon = document.getElementById(`like-icon-${postId}`);
+        const button = icon.closest('button');
+        
+        if (data.liked) {
+            icon.classList.remove('bi-heart');
+            icon.classList.add('bi-heart-fill');
+            button.classList.remove('btn-outline-danger');
+            button.classList.add('btn-danger');
+        } else {
+            icon.classList.remove('bi-heart-fill');
+            icon.classList.add('bi-heart');
+            button.classList.remove('btn-danger');
+            button.classList.add('btn-outline-danger');
+        }
+        
+        document.getElementById(`like-count-${postId}`).textContent = data.total_likes;
+    } catch (error) {
+        console.error('Erro:', error);
+    }
+}
+
+// Função auxiliar para mostrar toast
+function showToast(type, message) {
+    if (window.createToast) {
+        window.createToast(message, type);
+    } else {
+        alert(message);
+    }
+}
+</script>
+{% endblock %}
