@@ -15,9 +15,8 @@ class Profile(models.Model):
     uid = models.CharField(max_length=24, blank=True, default='')
     avatar = models.ImageField(upload_to=avatar_upload_to, blank=True, null=True)
     bio = models.TextField(blank=True)
-    # Redes sociais com JSON
+    # Redes sociais com JSON (Não terminei de implementar)
     socials = models.JSONField(default=list, blank=True)
-    
     # Preferências de acessibilidade e configurações
     dark_mode = models.BooleanField(default=False)
     vlibras_enabled = models.BooleanField(default=False)
@@ -53,7 +52,6 @@ class Profile(models.Model):
         self.last_activity = timezone.now()
         self.save(update_fields=['last_activity'])
 
-
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     content = models.TextField(max_length=5000)
@@ -77,7 +75,6 @@ class Post(models.Model):
         if user.is_authenticated:
             return self.likes.filter(user=user).exists()
         return False
-
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
@@ -108,7 +105,6 @@ class Friendship(models.Model):
     def __str__(self):
         return f'{self.user.username} é amigo de {self.friend.username}'
 
-
 class FriendRequest(models.Model):
     """Modelo para solicitações de amizade"""
     STATUS_CHOICES = [
@@ -137,7 +133,7 @@ class FriendRequest(models.Model):
         self.status = 'accepted'
         self.save()
         
-        # Criar amizade bidirecional
+        # Criar amizade pros 2 lados
         Friendship.objects.get_or_create(user=self.from_user, friend=self.to_user)
         Friendship.objects.get_or_create(user=self.to_user, friend=self.from_user)
     
@@ -149,3 +145,78 @@ class FriendRequest(models.Model):
     def cancel(self):
         """Cancela a solicitação (quem enviou pode cancelar)"""
         self.delete()
+
+class Opportunity(models.Model):
+    """Modelo para oportunidades (vagas, entrevistas, demandas)"""
+    TYPE_CHOICES = [
+        ('job', 'Vaga de Emprego'),
+        ('interview', 'Oportunidade de Entrevista'),
+        ('demand', 'Demanda/Projeto'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('open', 'Aberta'),
+        ('closed', 'Fechada'),
+        ('paused', 'Pausada'),
+    ]
+    
+    title = models.CharField(max_length=200, verbose_name='Título')
+    description = models.TextField(verbose_name='Descrição')
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='job', verbose_name='Tipo')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open', verbose_name='Status')
+    company = models.CharField(max_length=200, verbose_name='Empresa/Cliente', blank=True)
+    location = models.CharField(max_length=200, verbose_name='Localização', blank=True)
+    salary_range = models.CharField(max_length=100, verbose_name='Faixa Salarial', blank=True)
+    work_mode = models.CharField(max_length=50, verbose_name='Modo de Trabalho', blank=True, help_text='Ex: Remoto, Híbrido, Presencial')
+    requirements = models.TextField(verbose_name='Requisitos', blank=True)
+    skills = models.CharField(max_length=500, verbose_name='Habilidades', blank=True, help_text='Separe por vírgula')
+    deadline = models.DateField(verbose_name='Prazo de Inscrição', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_opportunities', verbose_name='Criado por')
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Oportunidade'
+        verbose_name_plural = 'Oportunidades'
+    
+    def __str__(self):
+        return f'{self.get_type_display()} - {self.title}'
+    
+    def total_applications(self):
+        """Retorna o total de inscrições"""
+        return self.applications.count()
+    
+    def is_expired(self):
+        """Verifica se a oportunidade está expirada"""
+        if self.deadline:
+            from django.utils import timezone
+            return timezone.now().date() > self.deadline
+        return False
+
+class Application(models.Model):
+    """Modelo para inscrições em oportunidades"""
+    STATUS_CHOICES = [
+        ('pending', 'Pendente'),
+        ('reviewing', 'Em Análise'),
+        ('accepted', 'Aceito'),
+        ('rejected', 'Rejeitado'),
+    ]
+    
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name='applications', verbose_name='Oportunidade')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applications', verbose_name='Usuário')
+    cover_letter = models.TextField(verbose_name='Carta de Apresentação', blank=True)
+    resume = models.FileField(upload_to='resumes/', verbose_name='Currículo', null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name='Status')
+    applied_at = models.DateTimeField(auto_now_add=True, verbose_name='Data da Inscrição')
+    updated_at = models.DateTimeField(auto_now=True)
+    admin_notes = models.TextField(verbose_name='Notas do Administrador', blank=True)
+    
+    class Meta:
+        unique_together = ('opportunity', 'user')
+        ordering = ['-applied_at']
+        verbose_name = 'Inscrição'
+        verbose_name_plural = 'Inscrições'
+    
+    def __str__(self):
+        return f'{self.user.username} - {self.opportunity.title}'

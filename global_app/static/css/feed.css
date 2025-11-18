@@ -37,7 +37,6 @@ textarea.form-control:focus {
 
 /* Imagem de avatar */
 .rounded-circle {
-    border: 2px solid #f8f9fa;
     width: 60px;
     height: 60px;
     border-radius: 50% !important;

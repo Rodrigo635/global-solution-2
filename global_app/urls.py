@@ -11,6 +11,10 @@ urlpatterns = [
     path('profile/<str:username>/', profile, name='public_profile'),
     path('friends/', friends, name='friends'),
     path('work_ai/', work_ai, name='work_ai'),
+    
+    # Oportunidades
+    path('opportunities/', opportunities, name='opportunities'),
+    path('opportunities/<int:opportunity_id>/', opportunity_detail, name='opportunity_detail'),
 
     path('feed/', feed, name='feed'),
     path('calls/', calls, name='calls'),
@@ -31,4 +35,8 @@ urlpatterns = [
     path('api/friends/request/reject/<int:request_id>/', reject_friend_request, name='reject_friend_request'),
     path('api/friends/request/cancel/<int:request_id>/', cancel_friend_request, name='cancel_friend_request'),
     path('api/friends/remove/<int:user_id>/', remove_friend, name='remove_friend'),
+    
+    # Rotas para oportunidades
+    path('api/opportunities/apply/<int:opportunity_id>/', apply_opportunity, name='apply_opportunity'),
+    path('api/opportunities/cancel/<int:application_id>/', cancel_application, name='cancel_application'),
 ]

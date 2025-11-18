@@ -8,7 +8,7 @@ from .forms import SignUpForm, PostForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.conf import settings
 from django.contrib.auth.models import User
-from .models import Post, Like, Profile, Friendship, FriendRequest
+from .models import Post, Like, Profile, Friendship, FriendRequest, Opportunity, Application
 from django.db.models import Q
 from django.views.decorators.http import require_POST
 import json
@@ -497,3 +497,124 @@ def search_users(request):
         })
     
     return JsonResponse({'users': results})
+
+@login_required
+def opportunities(request):
+    """View principal da página de oportunidades"""
+    # Filtros
+    opportunity_type = request.GET.get('type', '')
+    search_query = request.GET.get('q', '')
+    
+    # Buscar oportunidades abertas
+    opportunities_list = Opportunity.objects.filter(status='open')
+    
+    # Aplicar filtros
+    if opportunity_type:
+        opportunities_list = opportunities_list.filter(type=opportunity_type)
+    
+    if search_query:
+        opportunities_list = opportunities_list.filter(
+            Q(title__icontains=search_query) |
+            Q(company__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+    
+    opportunities_list = opportunities_list.order_by('-created_at')
+    
+    # Verificar quais oportunidades o usuário já se inscreveu
+    user_applications = Application.objects.filter(user=request.user).values_list('opportunity_id', flat=True)
+    
+    for opp in opportunities_list:
+        opp.user_applied = opp.id in user_applications
+    
+    # Buscar inscrições do usuário
+    user_applications_list = Application.objects.filter(user=request.user).select_related('opportunity').order_by('-applied_at')
+    
+    context = {
+        'opportunities': opportunities_list,
+        'user_applications': user_applications_list,
+        'current_type': opportunity_type,
+        'search_query': search_query,
+    }
+    
+    return render(request, 'pages/opportunities.html', context)
+
+@login_required
+def opportunity_detail(request, opportunity_id):
+    """View de detalhes de uma oportunidade"""
+    opportunity = get_object_or_404(Opportunity, id=opportunity_id)
+    
+    # Verificar se o usuário já se inscreveu
+    user_application = Application.objects.filter(
+        opportunity=opportunity,
+        user=request.user
+    ).first()
+    
+    context = {
+        'opportunity': opportunity,
+        'user_application': user_application,
+    }
+    
+    return render(request, 'pages/opportunity_detail.html', context)
+
+@login_required
+@require_POST
+def apply_opportunity(request, opportunity_id):
+    """Inscrição em uma oportunidade"""
+    try:
+        opportunity = get_object_or_404(Opportunity, id=opportunity_id)
+        
+        # Verificar se a oportunidade está aberta
+        if opportunity.status != 'open':
+            return JsonResponse({'success': False, 'error': 'Esta oportunidade está fechada'}, status=400)
+        
+        # Verificar se já expirou
+        if opportunity.is_expired():
+            return JsonResponse({'success': False, 'error': 'O prazo de inscrição expirou'}, status=400)
+        
+        # Verificar se já se inscreveu
+        if Application.objects.filter(opportunity=opportunity, user=request.user).exists():
+            return JsonResponse({'success': False, 'error': 'Você já se inscreveu nesta oportunidade'}, status=400)
+        
+        # Pegar dados do formulário
+        data = json.loads(request.body)
+        cover_letter = data.get('cover_letter', '')
+        
+        # Criar inscrição
+        application = Application.objects.create(
+            opportunity=opportunity,
+            user=request.user,
+            cover_letter=cover_letter,
+            status='pending'
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Inscrição realizada com sucesso!',
+            'application_id': application.id
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+@require_POST
+def cancel_application(request, application_id):
+    """Cancela uma inscrição"""
+    try:
+        application = get_object_or_404(Application, id=application_id, user=request.user)
+        
+        # Só pode cancelar se ainda estiver pendente
+        if application.status != 'pending':
+            return JsonResponse({'success': False, 'error': 'Não é possível cancelar esta inscrição'}, status=400)
+        
+        application.delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Inscrição cancelada com sucesso'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)

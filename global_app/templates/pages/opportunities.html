@@ -1,0 +1,213 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/opportunities.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="container py-5">
+    <div class="row g-4">
+        
+        <!-- Coluna principal - Oportunidades -->
+        <div class="col-lg-8">
+            <!-- Header com filtros -->
+            <div class="feature-card p-4 mb-4">
+                <h4 class="mb-3">Buscar oportunidades</h4>
+                
+                <!-- Busca e filtros -->
+                <form method="GET" class="mb-2">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="oportunidades" class="mb-2">Nome da oportunidade</label>
+                            <input type="text" name="q" id="oportunidades" class="form-control" placeholder="Buscar oportunidades..." value="{{ search_query }}">
+                        </div>
+                        <div class="col-12">
+                            <label for="tipos" class="mb-2">Filtrar por tipo</label>
+                            <select name="type" id="tipos" class="form-select" onchange="this.form.submit()">
+                                <option value="">Todos os tipos</option>
+                                <option value="job" {% if current_type == 'job' %}selected{% endif %}>Vagas de Emprego</option>
+                                <option value="interview" {% if current_type == 'interview' %}selected{% endif %}>Entrevistas</option>
+                                <option value="demand" {% if current_type == 'demand' %}selected{% endif %}>Demandas/Projetos</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Badges de filtro ativo -->
+                {% if current_type or search_query %}
+                <div class="d-flex gap-2 flex-wrap mb-3">
+                    {% if current_type %}
+                    <span class="badge bg-transparent border border-primary p-2">
+                        {% if current_type == 'job' %}Vagas de Emprego
+                        {% elif current_type == 'interview' %}Entrevistas
+                        {% else %}Demandas/Projetos{% endif %}
+                        <a href="?q={{ search_query }}" class="text-white ms-1"><i class="bi bi-x-lg"></i></a>
+                    </span>
+                    {% endif %}
+                    {% if search_query %}
+                    <span class="badge bg-transparent border border-primary p-2">
+                        Busca: "{{ search_query }}"
+                        <a href="?type={{ current_type }}" class="text-white ms-1"><i class="bi bi-x-lg"></i></a>
+                    </span>
+                    {% endif %}
+                    <a href="{% url 'opportunities' %}" class="badge bg-transparent border border-danger text-decoration-none p-2">Limpar filtros<i class="bi bi-x-lg ms-1"></i></a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Lista de oportunidades -->
+            {% if opportunities %}
+                {% for opp in opportunities %}
+                <div class="feature-card p-4 mb-3 opportunity-card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge {% if opp.type == 'job' %}bg-primary{% elif opp.type == 'interview' %}bg-success{% else %}bg-info{% endif %}">
+                                    {{ opp.get_type_display }}
+                                </span>
+                                {% if opp.work_mode %}
+                                <span class="badge bg-secondary">{{ opp.work_mode }}</span>
+                                {% endif %}
+                                {% if opp.user_applied %}
+                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Inscrito</span>
+                                {% endif %}
+                            </div>
+                            <h5 class="mb-2">{{ opp.title }}</h5>
+                            {% if opp.company %}
+                            <div class="text-muted small mb-2">
+                                <i class="bi bi-building me-1"></i>{{ opp.company }}
+                                {% if opp.location %}
+                                    • <i class="bi bi-geo-alt me-1"></i>{{ opp.location }}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            <p class="mb-2">{{ opp.description|truncatewords:30 }}</p>
+                            
+                            <!-- Informações adicionais -->
+                            <div class="d-flex gap-3 small text-muted">
+                                {% if opp.salary_range %}
+                                <span><i class="bi bi-cash me-1"></i>{{ opp.salary_range }}</span>
+                                {% endif %}
+                                {% if opp.deadline %}
+                                <span><i class="bi bi-calendar-event me-1"></i>Até {{ opp.deadline|date:"d/m/Y" }}</span>
+                                {% endif %}
+                                <span><i class="bi bi-people me-1"></i>{{ opp.total_applications }} inscrições</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'opportunity_detail' opp.id %}" class="btn btn-outline-primary">
+                            <i class="bi bi-eye me-1"></i>Ver detalhes
+                        </a>
+                        {% if not opp.user_applied %}
+                        <button class="btn btn-primary" onclick="quickApply({{ opp.id }}, '{{ opp.title|escapejs }}')">
+                            <i class="bi bi-check-circle me-1"></i>Candidatar-se
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="feature-card p-5 text-center">
+                    <i class="bi bi-search fs-1 text-muted"></i>
+                    <h5 class="mt-3">Nenhuma oportunidade encontrada</h5>
+                    <p class="text-muted">
+                        {% if current_type or search_query %}
+                            Tente ajustar seus filtros de busca
+                        {% else %}
+                            Novas oportunidades em breve!
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar - Minhas Inscrições -->
+        <aside class="col-lg-4">
+            <div class="feature-card p-4 mb-4">
+                <h6 class="mb-3">Minhas Inscrições</h6>
+                
+                {% if user_applications %}
+                    {% for app in user_applications|slice:":5" %}
+                    <div class="application-item p-3 mb-2 border rounded">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold small">{{ app.opportunity.title|truncatewords:4 }}</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">{{ app.opportunity.company }}</div>
+                            </div>
+                            <span class="badge {% if app.status == 'pending' %}bg-warning{% elif app.status == 'reviewing' %}bg-info{% elif app.status == 'accepted' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ app.get_status_display }}
+                            </span>
+                        </div>
+                        <div class="small text-muted">
+                            <i class="bi bi-clock me-1"></i>{{ app.applied_at|timesince }} atrás
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    {% if user_applications|length > 5 %}
+                    <div class="text-center mt-3">
+                        <small class="text-muted">+ {{ user_applications|length|add:"-5" }} inscrições</small>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center text-muted py-3">
+                        <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                        <p class="small mb-0">Nenhuma inscrição ainda</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Card informativo -->
+            <div class="feature-card p-4">
+                <h6 class="mb-3"><i class="bi bi-lightbulb me-2"></i>Dicas</h6>
+                <ul class="small mb-0 ps-3">
+                    <li class="mb-2">Complete seu perfil para aumentar suas chances</li>
+                    <li class="mb-2">Entre em contato com as empresas</li>
+                    <li class="mb-2">Candidate-se rapidamente às oportunidades</li>
+                    <li>Acompanhe o status das suas inscrições</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<!-- Modal de inscrição rápida -->
+<div class="modal fade" id="applyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Candidatar-se à vaga</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Candidatura para: <strong id="modalOpportunityTitle"></strong></p>
+                
+                <div class="mb-3">
+                    <label class="form-label">Carta de Apresentação (Opcional)</label>
+                    <textarea class="form-control" id="coverLetter" rows="4" 
+                              placeholder="Conte um pouco sobre você e por que está interessado nesta oportunidade..."></textarea>
+                </div>
+                
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <small>Você pode adicionar mais informações depois na página de detalhes</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmApplyBtn">
+                    <i class="bi bi-check-circle me-1"></i>Confirmar Inscrição
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/opportunities.js' %}"></script>
+
+{% endblock %}

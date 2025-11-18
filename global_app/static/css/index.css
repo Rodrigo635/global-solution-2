@@ -1,6 +1,7 @@
 /* Variáveis */
 :root {
     --primary: #0D6EFD;
+    --primary-hover: #0a51bd;
     --bg-azul: #0f172a;
     --bg-azul-escuro: #0a0f1c;
     --accent: #06b6d4;
@@ -223,4 +224,22 @@ footer a {
 .user-nav-item:hover {
     background-color: var(--primary);
     color: white;
+}
+
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.bg-azul {
+    background-color: var(--verde) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
 }
