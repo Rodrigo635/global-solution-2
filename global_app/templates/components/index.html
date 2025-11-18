@@ -122,14 +122,18 @@
                         </a>
                         <p class="small">Reinventando sua forma de fazer networking e acelerando sua carreira e contratações.</p>
                     </div>
-                    <div class="col-md-4">
-                        <h6 class="text-white">Links</h6>
-                        <ul class="list-unstyled small">
-                            <li><a href="{% url 'home' %}">Início</a></li>
+                    <div class="col-0 col-md-1">
+
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="text-white"><i class="bi bi-link-45deg me-2"></i>Links úteis</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="{% url 'home' %}"><i class="bi bi-house-fill me-2"></i>Início</a></li>
                             {% if user.is_authenticated %}
-                                <li><a href="{% url 'calls' %}">Chamadas</a></li>
-                                <li><a href="#">Vagas</a></li>
-                                <li><a href="#">Amigos</a></li>
+                                <li><a href="{% url 'calls' %}"><i class="bi bi-telephone-fill me-2"></i>Chamadas</a></li>
+                                <li><a href="{% url 'opportunities' %}"><i class="bi bi-briefcase-fill me-2"></i>Oportunidades</a></li>
+                                <li><a href="{% url 'friends' %}"><i class="bi bi-people-fill me-2"></i>Amigos</a></li>
+                                <li><a href="{% url 'work_ai' %}"><i class="bi bi-robot me-2"></i>Work AI</a></li>
                             {% else %}
                                 <li><a href="#como">Como funciona</a></li>
                                 <li><a href="#empresas">Para empresas</a></li>
@@ -138,8 +142,12 @@
                         </ul>
                     </div>
                     <div class="col-md-4">
-                        <h6 class="text-white">Contato</h6>
-                        <p class="small mb-1">email.inventado@email.com</p>
+                        <h6 class="text-white"><i class="bi bi-info-circle me-2"></i>Dados legais e contato</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#"><i class="bi bi-file-earmark-text-fill me-2"></i>Termos de uso</a></li>
+                            <li><a href="#"><i class="bi bi-shield-lock-fill me-2"></i>Política de privacidade</a></li>
+                            <li><p><i class="bi bi-envelope-fill me-2"></i>connectfiap@gmail.com</p></li>
+                        </ul>
                     </div>
                 </div>
             </div>
