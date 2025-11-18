@@ -1,0 +1,223 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-10">
+            <!-- Header das políticas -->
+            <div class="feature-card p-5 mb-4 text-center">
+                <i class="bi bi-shield-check text-primary" style="font-size: 3rem;"></i>
+                <h1 class="mt-3 mb-2">Política de Privacidade</h1>
+                <p class="text-muted">Última atualização: 18 de Novembro de 2025</p>
+            </div>
+
+            <!-- Conteúdo -->
+            <div class="feature-card p-5 legal-content">
+                
+                <section class="mb-5">
+                    <h2>1. Introdução</h2>
+                    <p>Bem-vindo à Connecta FIAP. Esta Política de Privacidade descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais quando você utiliza nossa plataforma de networking profissional e mentorias através de chamadas de vídeo e áudio.</p>
+                    <p>Ao utilizar nossos serviços, você concorda com a coleta e uso de informações de acordo com esta política. Se você não concordar com algum termo aqui descrito, pedimos que não utilize nossa plataforma.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>2. Informações que Coletamos</h2>
+                    
+                    <h3>2.1. Informações Fornecidas por Você</h3>
+                    <p>Coletamos as seguintes informações quando você cria uma conta e utiliza nossa plataforma:</p>
+                    <ul>
+                        <li><strong>Dados de Cadastro:</strong> nome, sobrenome, nome de usuário, endereço de e-mail e senha (armazenada de forma criptografada)</li>
+                        <li><strong>Informações de Perfil:</strong> foto de perfil (avatar), biografia, informações sobre redes sociais</li>
+                        <li><strong>Conteúdo Criado:</strong> publicações no feed, comentários, curtidas e outras interações na plataforma</li>
+                        <li><strong>Candidaturas:</strong> cartas de apresentação e currículos enviados para oportunidades de emprego, entrevistas ou demandas</li>
+                        <li><strong>Dados de Chamadas:</strong> metadados sobre chamadas de vídeo e áudio realizadas (duração, horário, participantes), mas não gravamos ou armazenamos o conteúdo das chamadas</li>
+                    </ul>
+
+                    <h3>2.2. Informações Coletadas Automaticamente</h3>
+                    <ul>
+                        <li><strong>Dados de Uso:</strong> páginas visitadas, recursos utilizados, tempo de permanência na plataforma</li>
+                        <li><strong>Atividade Online:</strong> último horário de atividade para exibir status online/offline</li>
+                        <li><strong>Informações de Dispositivo:</strong> tipo de navegador, sistema operacional, endereço IP</li>
+                        <li><strong>Cookies:</strong> utilizamos cookies essenciais para manter sua sessão ativa e preferências (modo escuro, tamanho de fonte, etc.)</li>
+                    </ul>
+
+                    <h3>2.3. Informações de Terceiros</h3>
+                    <p>Não coletamos informações de terceiros no momento. Se você conectar redes sociais ao seu perfil, armazenamos apenas os links fornecidos por você.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>3. Como Usamos Suas Informações</h2>
+                    <p>Utilizamos suas informações pessoais para:</p>
+                    <ul>
+                        <li><strong>Fornecer nossos serviços:</strong> criar e manter sua conta, permitir networking, facilitar chamadas de vídeo/áudio e mentorias</li>
+                        <li><strong>Personalizar sua experiência:</strong> exibir conteúdo relevante, sugerir conexões e oportunidades adequadas ao seu perfil</li>
+                        <li><strong>Facilitar conexões:</strong> permitir que outros usuários encontrem você através de busca e recomendações</li>
+                        <li><strong>Processar candidaturas:</strong> enviar suas inscrições para oportunidades de emprego, entrevistas e projetos</li>
+                        <li><strong>Melhorar a plataforma:</strong> analisar padrões de uso para aprimorar funcionalidades e experiência do usuário</li>
+                        <li><strong>Comunicações:</strong> enviar notificações sobre atividades na plataforma, atualizações de sistema e informações importantes</li>
+                        <li><strong>Segurança:</strong> detectar e prevenir fraudes, abusos e violações de nossos Termos de Uso</li>
+                        <li><strong>Conformidade Legal:</strong> cumprir obrigações legais e regulatórias aplicáveis</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>4. Compartilhamento de Informações</h2>
+                    
+                    <h3>4.1. Informações Públicas</h3>
+                    <p>As seguintes informações são públicas e visíveis para outros usuários da plataforma:</p>
+                    <ul>
+                        <li>Nome, username e foto de perfil</li>
+                        <li>Biografia e redes sociais (se você optar por adicionar)</li>
+                        <li>Publicações, comentários e curtidas no feed</li>
+                        <li>Status online/offline (se você não desabilitar nas configurações)</li>
+                        <li>Lista de amigos (visível para seus amigos)</li>
+                    </ul>
+
+                    <h3>4.2. Informações Privadas</h3>
+                    <p>As seguintes informações são mantidas privadas e não são compartilhadas publicamente:</p>
+                    <ul>
+                        <li>Endereço de e-mail</li>
+                        <li>Senha (armazenada com hash criptográfico)</li>
+                        <li>Candidaturas e cartas de apresentação (visíveis apenas para administradores das oportunidades)</li>
+                        <li>Configurações de acessibilidade e preferências</li>
+                        <li>Histórico detalhado de atividades</li>
+                    </ul>
+
+                    <h3>4.3. Compartilhamento com Terceiros</h3>
+                    <p>Não vendemos, alugamos ou compartilhamos suas informações pessoais com terceiros para fins de marketing. Podemos compartilhar informações apenas nas seguintes situações:</p>
+                    <ul>
+                        <li><strong>Provedores de Serviço:</strong> empresas que nos ajudam a operar a plataforma (hospedagem, infraestrutura de chamadas)</li>
+                        <li><strong>Requisitos Legais:</strong> quando exigido por lei, ordem judicial ou autoridades governamentais</li>
+                        <li><strong>Proteção de Direitos:</strong> para proteger nossos direitos legais, propriedade ou segurança dos usuários</li>
+                        <li><strong>Transações Empresariais:</strong> em caso de fusão, aquisição ou venda de ativos</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>5. Armazenamento e Segurança</h2>
+                    <p>Implementamos medidas técnicas e organizacionais para proteger suas informações:</p>
+                    <ul>
+                        <li><strong>Criptografia:</strong> senhas são armazenadas com hash criptográfico (bcrypt/PBKDF2)</li>
+                        <li><strong>HTTPS:</strong> toda comunicação entre seu navegador e nossos servidores é criptografada</li>
+                        <li><strong>Controle de Acesso:</strong> acesso limitado às informações pessoais por nossa equipe</li>
+                        <li><strong>Monitoramento:</strong> sistemas de detecção de atividades suspeitas e tentativas de acesso não autorizado</li>
+                        <li><strong>Backups Regulares:</strong> cópias de segurança para evitar perda de dados</li>
+                    </ul>
+                    <p class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Embora implementemos medidas de segurança robustas, nenhum sistema é 100% seguro. Recomendamos que você use uma senha forte e única para sua conta.
+                    </p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>6. Retenção de Dados</h2>
+                    <p>Mantemos suas informações pessoais pelo tempo necessário para:</p>
+                    <ul>
+                        <li>Fornecer nossos serviços enquanto sua conta estiver ativa</li>
+                        <li>Cumprir obrigações legais e regulatórias</li>
+                        <li>Resolver disputas e fazer cumprir nossos acordos</li>
+                    </ul>
+                    <p>Se você excluir sua conta, removeremos suas informações pessoais de nossos sistemas ativos dentro de 30 dias, exceto quando a retenção for necessária por motivos legais.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>7. Seus Direitos (LGPD)</h2>
+                    <p>De acordo com a Lei Geral de Proteção de Dados (LGPD), você tem os seguintes direitos:</p>
+                    <ul>
+                        <li><strong>Acesso:</strong> solicitar uma cópia de todas as informações que temos sobre você</li>
+                        <li><strong>Correção:</strong> atualizar ou corrigir suas informações pessoais</li>
+                        <li><strong>Exclusão:</strong> solicitar a exclusão de sua conta e dados pessoais</li>
+                        <li><strong>Portabilidade:</strong> receber suas informações em formato estruturado e legível</li>
+                        <li><strong>Oposição:</strong> se opor ao processamento de suas informações para determinadas finalidades</li>
+                        <li><strong>Revogação de Consentimento:</strong> retirar consentimento para processamento de dados a qualquer momento</li>
+                        <li><strong>Informação:</strong> saber como suas informações são usadas e com quem são compartilhadas</li>
+                    </ul>
+                    <p>Para exercer qualquer desses direitos, entre em contato conosco através do e-mail: <strong>connectafiap@gmail.com</strong></p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>8. Cookies e Tecnologias Similares</h2>
+                    <p>Utilizamos cookies essenciais e funcionais para:</p>
+                    <ul>
+                        <li>Manter você conectado durante sua sessão</li>
+                        <li>Lembrar suas preferências (modo escuro, tamanho de fonte, V-Libras)</li>
+                        <li>Proteger contra fraudes e melhorar a segurança</li>
+                    </ul>
+                    <p>Você pode desabilitar cookies nas configurações do seu navegador, mas isso pode afetar a funcionalidade da plataforma.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>9. Menores de Idade</h2>
+                    <p>Nossa plataforma é destinada a usuários maiores de 18 anos. Não coletamos intencionalmente informações de menores de idade. Se descobrirmos que um menor forneceu informações pessoais, excluiremos essas informações imediatamente.</p>
+                    <p>Se você é pai, mãe ou responsável e acredita que seu filho nos forneceu informações pessoais, entre em contato conosco.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>10. Links para Sites Externos</h2>
+                    <p>Nossa plataforma pode conter links para sites de terceiros. Não somos responsáveis pelas práticas de privacidade desses sites. Recomendamos que você leia as políticas de privacidade de qualquer site externo que visitar.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>11. Alterações nesta Política</h2>
+                    <p>Podemos atualizar esta Política de Privacidade periodicamente. Notificaremos você sobre mudanças significativas através de:</p>
+                    <ul>
+                        <li>Aviso destacado na plataforma</li>
+                        <li>E-mail para o endereço cadastrado</li>
+                        <li>Notificação no feed</li>
+                    </ul>
+                    <p>Recomendamos que você revise esta política regularmente para se manter informado sobre como protegemos suas informações.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>12. Entre em Contato</h2>
+                    <p>Se você tiver dúvidas, preocupações ou solicitações relacionadas a esta Política de Privacidade, entre em contato conosco:</p>
+                    <div class="alert alert-light border">
+                        <p class="mb-2"><strong>Encarregado de Dados (DPO)</strong></p>
+                        <p class="mb-1"><i class="bi bi-envelope me-2"></i>E-mail: connectafiap@gmail.com</p>
+                    </div>
+                </section>
+
+                <div class="text-center mt-5 pt-4 border-top">
+                    <p class="text-muted small mb-2">Esta política foi atualizada pela última vez em 18 de Novembro de 2025</p>
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a href="{% url 'terms_of_use' %}" class="text-decoration-none">Termos de Uso</a>
+                        <span class="text-muted">•</span>
+                        <a href="{% url 'home' %}" class="text-decoration-none">Voltar ao Início</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

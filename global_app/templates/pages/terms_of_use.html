@@ -1,0 +1,336 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-10">
+            <!-- Header dos termos -->
+            <div class="feature-card p-5 mb-4 text-center">
+                <i class="bi bi-file-text text-primary" style="font-size: 3rem;"></i>
+                <h1 class="mt-3 mb-2">Termos de Uso</h1>
+                <p class="text-muted">Última atualização: 18 de Novembro de 2025</p>
+            </div>
+
+            <!-- Conteúdo -->
+            <div class="feature-card p-5 legal-content">
+                
+                <section class="mb-5">
+                    <h2>1. Aceitação dos Termos</h2>
+                    <p>Bem-vindo à <strong>Connecta FIAP</strong>! Estes Termos de Uso ("Termos") constituem um acordo legal entre você ("Usuário") e a Connecta FIAP ("nós" ou "nossa Plataforma"). Ao criar uma conta ou utilizar nossos serviços, você concorda em cumprir estes Termos.</p>
+                    <p class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Importante:</strong> Se você não concordar com qualquer parte destes Termos, não utilize nossa plataforma.
+                    </p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>2. Descrição do Serviço</h2>
+                    <p>A Connecta FIAP é uma plataforma de networking profissional e mentorias que oferece:</p>
+                    <ul>
+                        <li><strong>Networking:</strong> conecte-se com profissionais da sua área através de solicitações de amizade e interações</li>
+                        <li><strong>Mentorias:</strong> realize e participe de sessões de mentoria através de chamadas de vídeo e áudio</li>
+                        <li><strong>Feed Social:</strong> compartilhe publicações, curta e comente conteúdos de outros usuários</li>
+                        <li><strong>Oportunidades:</strong> candidate-se a vagas de emprego, entrevistas e projetos freelance</li>
+                        <li><strong>Perfil Profissional:</strong> crie e mantenha seu perfil com informações profissionais e redes sociais</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>3. Elegibilidade</h2>
+                    <p>Para usar a Connecta FIAP, você deve:</p>
+                    <ul>
+                        <li>Ter pelo menos <strong>18 anos de idade</strong></li>
+                        <li>Fornecer informações verdadeiras e precisas durante o cadastro</li>
+                        <li>Manter suas informações de conta atualizadas</li>
+                        <li>Não estar proibido de usar nossos serviços sob as leis aplicáveis</li>
+                        <li>Não ter tido uma conta anteriormente suspensa ou banida por violação destes Termos</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>4. Criação e Segurança da Conta</h2>
+                    
+                    <h3>4.1. Responsabilidade pela Conta</h3>
+                    <p>Você é totalmente responsável por:</p>
+                    <ul>
+                        <li>Manter a confidencialidade de sua senha</li>
+                        <li>Todas as atividades que ocorrem sob sua conta</li>
+                        <li>Notificar-nos imediatamente sobre qualquer uso não autorizado</li>
+                    </ul>
+
+                    <h3>4.2. Informações de Cadastro</h3>
+                    <p>Durante o cadastro, você fornece:</p>
+                    <ul>
+                        <li>Nome e sobrenome</li>
+                        <li>Nome de usuário único</li>
+                        <li>Endereço de e-mail válido</li>
+                        <li>Senha segura</li>
+                    </ul>
+                    <p>Você garante que todas as informações fornecidas são verdadeiras, precisas e completas.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>5. Conduta do Usuário</h2>
+                    
+                    <h3>5.1. Usos Permitidos</h3>
+                    <p>Você pode usar a Connecta FIAP para:</p>
+                    <ul>
+                        <li>Construir sua rede profissional</li>
+                        <li>Participar de sessões de mentoria</li>
+                        <li>Compartilhar conhecimento e experiências profissionais</li>
+                        <li>Buscar e ofertar oportunidades de trabalho</li>
+                        <li>Colaborar em projetos profissionais</li>
+                    </ul>
+
+                    <h3>5.2. Usos Proibidos</h3>
+                    <p>Você <strong>NÃO pode</strong>:</p>
+                    <ul>
+                        <li>Publicar conteúdo ilegal, ofensivo, discriminatório ou que incite violência</li>
+                        <li>Assediar, intimidar ou ameaçar outros usuários</li>
+                        <li>Compartilhar informações falsas ou enganosas</li>
+                        <li>Usar a plataforma para spam, fraudes ou esquemas</li>
+                        <li>Criar múltiplas contas ou contas falsas (fake profiles)</li>
+                        <li>Coletar dados de outros usuários sem consentimento</li>
+                        <li>Usar bots, scripts ou automações não autorizadas</li>
+                        <li>Tentar acessar contas de outros usuários</li>
+                        <li>Interferir no funcionamento normal da plataforma</li>
+                        <li>Violar direitos de propriedade intelectual</li>
+                        <li>Usar a plataforma para fins comerciais não relacionados a networking/mentoria</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>6. Conteúdo do Usuário</h2>
+                    
+                    <h3>6.1. Propriedade do Conteúdo</h3>
+                    <p>Você mantém todos os direitos sobre o conteúdo que publica (publicações, comentários, fotos, etc.). No entanto, ao publicar conteúdo na Connecta, você nos concede uma licença mundial, não exclusiva, transferível e isenta de royalties para:</p>
+                    <ul>
+                        <li>Usar, copiar, reproduzir e exibir seu conteúdo na plataforma</li>
+                        <li>Permitir que outros usuários visualizem e interajam com seu conteúdo</li>
+                        <li>Modificar ou adaptar seu conteúdo para fins técnicos (formatação, tradução, etc.)</li>
+                    </ul>
+
+                    <h3>6.2. Responsabilidade pelo Conteúdo</h3>
+                    <p>Você é totalmente responsável por todo o conteúdo que publica e pelas consequências de sua publicação. Não monitora preventivamente todo o conteúdo, mas nos reservamos o direito de:</p>
+                    <ul>
+                        <li>Remover ou modificar conteúdo que viole estes Termos</li>
+                        <li>Suspender ou encerrar contas de usuários que violem nossas políticas</li>
+                        <li>Cooperar com autoridades em investigações legais</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>7. Chamadas de Vídeo e Áudio</h2>
+                    
+                    <h3>7.1. Uso das Chamadas</h3>
+                    <p>As chamadas de vídeo e áudio devem ser usadas para:</p>
+                    <ul>
+                        <li>Sessões de mentoria profissional</li>
+                        <li>Networking e construção de relacionamentos</li>
+                        <li>Entrevistas de emprego</li>
+                        <li>Colaboração em projetos</li>
+                    </ul>
+
+                    <h3>7.2. Gravação de Chamadas</h3>
+                    <p class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Não gravamos ou armazenamos</strong> o conteúdo de suas chamadas de vídeo ou áudio. Coletamos apenas metadados (duração, horário, participantes) para melhorar nossos serviços.
+                    </p>
+                    <p>Se você decidir gravar uma chamada por conta própria, deve:</p>
+                    <ul>
+                        <li>Obter consentimento explícito de todos os participantes</li>
+                        <li>Informar claramente que a chamada está sendo gravada</li>
+                        <li>Cumprir todas as leis aplicáveis sobre gravação</li>
+                    </ul>
+
+                    <h3>7.3. Conduta em Chamadas</h3>
+                    <p>Durante as chamadas, você deve:</p>
+                    <ul>
+                        <li>Manter comportamento profissional e respeitoso</li>
+                        <li>Não compartilhar conteúdo inadequado ou ilegal</li>
+                        <li>Respeitar a privacidade dos outros participantes</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>8. Oportunidades de Emprego e Projetos</h2>
+                    
+                    <h3>8.1. Candidaturas</h3>
+                    <p>Ao se candidatar a oportunidades:</p>
+                    <ul>
+                        <li>Você garante que as informações fornecidas são verdadeiras</li>
+                        <li>Você concede permissão para que administradores da oportunidade visualizem sua candidatura</li>
+                        <li>Você entende que a decisão final é do empregador/contratante</li>
+                    </ul>
+
+                    <h3>8.2. Isenção de Responsabilidade</h3>
+                    <p>A Connecta FIAP:</p>
+                    <ul>
+                        <li>Não verifica a autenticidade de todas as oportunidades publicadas</li>
+                        <li>Não é responsável por contratos ou acordos entre usuários e empregadores</li>
+                        <li>Não garante que você será contratado ou selecionado</li>
+                        <li>Recomenda cautela e due diligence em todas as interações</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>9. Propriedade Intelectual</h2>
+                    <p>Todos os direitos de propriedade intelectual da plataforma Connecta FIAP (incluindo, mas não se limitando a, design, logotipo, código, textos, gráficos) são de propriedade exclusiva da Connecta ou de seus licenciadores.</p>
+                    <p>Você não pode:</p>
+                    <ul>
+                        <li>Copiar, modificar ou distribuir qualquer parte da plataforma</li>
+                        <li>Fazer engenharia reversa ou tentar extrair código-fonte</li>
+                        <li>Usar nossas marcas registradas sem autorização prévia por escrito</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>10. Suspensão e Encerramento de Conta</h2>
+                    
+                    <h3>10.1. Por Você</h3>
+                    <p>Você pode encerrar sua conta a qualquer momento através das configurações de perfil. Após o encerramento:</p>
+                    <ul>
+                        <li>Suas informações pessoais serão excluídas conforme nossa Política de Privacidade</li>
+                        <li>Seu conteúdo público pode permanecer visível por até 30 dias</li>
+                        <li>Conexões e amizades serão desfeitas</li>
+                    </ul>
+
+                    <h3>10.2. Por Nós</h3>
+                    <p>Podemos suspender ou encerrar sua conta, sem aviso prévio, se:</p>
+                    <ul>
+                        <li>Você violar estes Termos de Uso</li>
+                        <li>Detectarmos atividade fraudulenta ou suspeita</li>
+                        <li>Formos obrigados por lei ou ordem judicial</li>
+                        <li>Sua conta permanecer inativa por período prolongado</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>11. Isenção de Garantias</h2>
+                    <p>A Connecta FIAP é fornecida "como está" e "conforme disponível". Não garantimos que:</p>
+                    <ul>
+                        <li>O serviço será ininterrupto ou livre de erros</li>
+                        <li>Defeitos serão corrigidos imediatamente</li>
+                        <li>O serviço atenderá suas necessidades específicas</li>
+                        <li>Informações obtidas através da plataforma serão precisas</li>
+                    </ul>
+                    <p class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Você usa a plataforma por sua própria conta e risco.
+                    </p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>12. Limitação de Responsabilidade</h2>
+                    <p>Na máxima extensão permitida por lei, a Connecta FIAP não será responsável por:</p>
+                    <ul>
+                        <li>Danos indiretos, incidentais ou consequenciais</li>
+                        <li>Perda de lucros, dados ou oportunidades</li>
+                        <li>Interações ou disputas entre usuários</li>
+                        <li>Conteúdo ou conduta de terceiros</li>
+                        <li>Acesso não autorizado ou alteração de suas transmissões/dados</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>13. Indenização</h2>
+                    <p>Você concorda em indenizar e isentar a Connecta FIAP de responsabilidade por quaisquer reclamações, danos, obrigações, perdas ou despesas (incluindo honorários advocatícios) decorrentes de:</p>
+                    <ul>
+                        <li>Seu uso da plataforma</li>
+                        <li>Violação destes Termos</li>
+                        <li>Violação de direitos de terceiros</li>
+                        <li>Conteúdo que você publicar</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>14. Modificações dos Termos</h2>
+                    <p>Podemos modificar estes Termos a qualquer momento. Quando fizermos mudanças significativas:</p>
+                    <ul>
+                        <li>Notificaremos você através da plataforma e/ou por e-mail</li>
+                        <li>A data de "Última atualização" será revisada</li>
+                        <li>Você terá 30 dias para revisar as mudanças</li>
+                    </ul>
+                    <p>O uso continuado da plataforma após mudanças constitui aceitação dos novos Termos.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>15. Lei Aplicável e Jurisdição</h2>
+                    <p>Estes Termos serão regidos e interpretados de acordo com as leis da República Federativa do Brasil. Qualquer disputa relacionada a estes Termos será resolvida nos tribunais da comarca de São Paulo, SP.</p>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>16. Disposições Gerais</h2>
+                    <ul>
+                        <li><strong>Acordo Integral:</strong> Estes Termos constituem o acordo integral entre você e a Connecta FIAP</li>
+                        <li><strong>Renúncia:</strong> A falha em fazer cumprir qualquer disposição não constitui renúncia</li>
+                        <li><strong>Divisibilidade:</strong> Se qualquer disposição for considerada inválida, as demais permanecerão em vigor</li>
+                        <li><strong>Cessão:</strong> Você não pode transferir seus direitos sem nosso consentimento prévio</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section class="mb-5">
+                    <h2>17. Entre em Contato</h2>
+                    <p>Para dúvidas sobre estes Termos de Uso:</p>
+                    <div class="alert alert-light border">
+                        <p class="mb-2"><strong>Suporte Legal</strong></p>
+                        <p class="mb-1"><i class="bi bi-envelope me-2"></i>E-mail: connectafiap@gmail.com</p>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <div class="text-center mt-5 pt-4 border-top">
+                    <p class="text-muted small mb-2">Estes termos foram atualizados pela última vez em 18 de Novembro de 2025</p>
+                    <p class="text-muted small mb-3">Ao usar a Connecta FIAP, você concorda com estes Termos de Uso</p>
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a href="{% url 'privacy_policy' %}" class="text-decoration-none">Política de Privacidade</a>
+                        <span class="text-muted">•</span>
+                        <a href="{% url 'home' %}" class="text-decoration-none">Voltar ao Início</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

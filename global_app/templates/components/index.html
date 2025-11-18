@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Global Solution 2</title>
+        <title>Connecta FIAP</title>
 
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -59,14 +59,14 @@
                         <div class="p-0 me-1 rounded-3 d-flex align-items-center justify-content-center" style="background:linear-gradient(135deg,var(--primary),var(--accent)); width:44px; height:44px; display:grid; place-items:center; color:white">
                             <h1 class="display-6 m-0 fw-semibold">C</h1>
                         </div>
-                        <span><h4 class="m-0">onnecta</h4></span>
+                        <span><h4 class="m-0">onnecta FIAP</h4></span>
                     </a>
                 {% else %}
                     <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'home' %}">
                         <div class="p-0 me-1 rounded-3 d-flex align-items-center justify-content-center" style="background:linear-gradient(135deg,var(--primary),var(--accent)); width:44px; height:44px; display:grid; place-items:center; color:white">
                             <h1 class="display-6 m-0 fw-semibold">C</h1>
                         </div>
-                        <span><h4 class="m-0">onnecta</h4></span>
+                        <span><h4 class="m-0">onnecta FIAP</h4></span>
                     </a>
                 {% endif %}
 
@@ -118,7 +118,7 @@
                 <div class="row text-center text-md-start">
                     <div class="col-md-4">
                         <a href="{% url 'home' %}">
-                            <h5 class="text-white">Connecta</h5>
+                            <h5 class="text-white">Connecta FIAP</h5>
                         </a>
                         <p class="small">Reinventando sua forma de fazer networking e acelerando sua carreira e contratações.</p>
                     </div>
@@ -144,8 +144,8 @@
                     <div class="col-md-4">
                         <h6 class="text-white"><i class="bi bi-info-circle me-2"></i>Dados legais e contato</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#"><i class="bi bi-file-earmark-text-fill me-2"></i>Termos de uso</a></li>
-                            <li><a href="#"><i class="bi bi-shield-lock-fill me-2"></i>Política de privacidade</a></li>
+                            <li><a href="{% url 'terms_of_use' %}"><i class="bi bi-file-earmark-text-fill me-2"></i>Termos de uso</a></li>
+                            <li><a href="{% url 'privacy_policy' %}"><i class="bi bi-shield-lock-fill me-2"></i>Política de privacidade</a></li>
                             <li><p><i class="bi bi-envelope-fill me-2"></i>connectfiap@gmail.com</p></li>
                         </ul>
                     </div>

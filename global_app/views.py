@@ -618,3 +618,9 @@ def cancel_application(request, application_id):
         
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+def privacy_policy(request):
+    return render(request, 'pages/privacy_policy.html')
+
+def terms_of_use(request):
+    return render(request, 'pages/terms_of_use.html')

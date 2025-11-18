@@ -11,6 +11,8 @@ urlpatterns = [
     path('profile/<str:username>/', profile, name='public_profile'),
     path('friends/', friends, name='friends'),
     path('work_ai/', work_ai, name='work_ai'),
+    path('privacy_policy/', privacy_policy, name='privacy_policy'),
+    path('terms_of_use/', terms_of_use, name='terms_of_use'),
     
     # Oportunidades
     path('opportunities/', opportunities, name='opportunities'),
