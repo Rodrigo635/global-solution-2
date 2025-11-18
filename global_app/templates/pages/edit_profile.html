@@ -1,0 +1,288 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<style>
+  .avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .avatar-preview i {
+    font-size: 70px;
+    color: white;
+  }
+  
+  .form-section {
+    margin-bottom: 2rem;
+  }
+  
+  .form-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--bs-border-color);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+  <!-- Cabeçalho -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h2 class="mb-1">Editar Perfil</h2>
+      <p class="text-muted mb-0">Atualize suas informações pessoais e redes sociais</p>
+    </div>
+    <a href="{% url 'my_profile' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-2"></i>Voltar
+    </a>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <!-- Formulário -->
+      <div class="feature-card p-4">
+        <form method="post" enctype="multipart/form-data" id="editProfileForm">
+          {% csrf_token %}
+          
+          <!-- Preview do Avatar -->
+          <div class="text-center mb-4">
+            <div class="avatar-preview" id="avatarPreview">
+              {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" alt="Avatar" id="avatarImg">
+              {% else %}
+                <i class="bi bi-person-fill" id="avatarIcon"></i>
+              {% endif %}
+            </div>
+            {{ form.avatar }}
+            <div class="text-muted small">
+              <i class="bi bi-info-circle me-1"></i>
+              Formatos aceitos: JPG, PNG. Tamanho máximo: 5MB
+            </div>
+          </div>
+
+          <!-- Informações Pessoais -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <i class="bi bi-person me-2"></i>Informações Pessoais
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                  {{ form.first_name.label }}
+                </label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                  <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                  {{ form.last_name.label }}
+                </label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                  <div class="text-danger small mt-1">{{ form.last_name.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-12">
+                <label for="{{ form.email.id_for_label }}" class="form-label">
+                  {{ form.email.label }}
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                  <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-12">
+                <label for="{{ form.bio.id_for_label }}" class="form-label">
+                  {{ form.bio.label }}
+                </label>
+                {{ form.bio }}
+                <div class="d-flex justify-content-between align-items-center mt-1">
+                  <div class="text-muted small">{{ form.bio.help_text }}</div>
+                  <div class="text-muted small">
+                    <span id="bioCharCount">0</span>/500 caracteres
+                  </div>
+                </div>
+                {% if form.bio.errors %}
+                  <div class="text-danger small mt-1">{{ form.bio.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Redes Sociais -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <i class="bi bi-share me-2"></i>Redes Sociais
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="{{ form.facebook_url.id_for_label }}" class="form-label">
+                  <i class="bi bi-facebook text-primary me-2"></i>{{ form.facebook_url.label }}
+                </label>
+                {{ form.facebook_url }}
+                {% if form.facebook_url.errors %}
+                  <div class="text-danger small mt-1">{{ form.facebook_url.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.instagram_url.id_for_label }}" class="form-label">
+                  <i class="bi bi-instagram text-danger me-2"></i>{{ form.instagram_url.label }}
+                </label>
+                {{ form.instagram_url }}
+                {% if form.instagram_url.errors %}
+                  <div class="text-danger small mt-1">{{ form.instagram_url.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.linkedin_url.id_for_label }}" class="form-label">
+                  <i class="bi bi-linkedin text-primary me-2"></i>{{ form.linkedin_url.label }}
+                </label>
+                {{ form.linkedin_url }}
+                {% if form.linkedin_url.errors %}
+                  <div class="text-danger small mt-1">{{ form.linkedin_url.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.twitter_url.id_for_label }}" class="form-label">
+                  <i class="bi bi-twitter-x text-dark me-2"></i>{{ form.twitter_url.label }}
+                </label>
+                {{ form.twitter_url }}
+                {% if form.twitter_url.errors %}
+                  <div class="text-danger small mt-1">{{ form.twitter_url.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.github_url.id_for_label }}" class="form-label">
+                  <i class="bi bi-github text-dark me-2"></i>{{ form.github_url.label }}
+                </label>
+                {{ form.github_url }}
+                {% if form.github_url.errors %}
+                  <div class="text-danger small mt-1">{{ form.github_url.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="d-flex gap-2 justify-content-end mt-4">
+            <a href="{% url 'my_profile' %}" class="btn btn-outline-secondary">
+              Cancelar
+            </a>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-lg me-2"></i>Salvar Alterações
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Painel Lateral com Dicas -->
+    <aside class="col-lg-4">
+      <div class="feature-card p-4 mb-4">
+        <h6 class="mb-3">
+          <i class="bi bi-lightbulb me-2"></i>Dicas para um perfil completo
+        </h6>
+        <ul class="list-unstyled mb-0">
+          <li class="mb-2">
+            <i class="bi bi-check-circle text-success me-2"></i>
+            <small>Use uma foto de perfil profissional</small>
+          </li>
+          <li class="mb-2">
+            <i class="bi bi-check-circle text-success me-2"></i>
+            <small>Coloque a área em que trabalha em sua bio</small>
+          </li>
+          <li class="mb-2">
+            <i class="bi bi-check-circle text-success me-2"></i>
+            <small>Adicione suas redes sociais profissionais</small>
+          </li>
+          <li class="mb-0">
+            <i class="bi bi-check-circle text-success me-2"></i>
+            <small>Mantenha seu endereços para contatos atualizados</small>
+          </li>
+        </ul>
+      </div>
+
+      <div class="feature-card p-4">
+        <h6 class="mb-2">
+          <i class="bi bi-shield-check me-2"></i>Privacidade
+        </h6>
+        <p class="small text-muted mb-0">
+          Suas informações são protegidas e visíveis apenas para membros da plataforma.
+        </p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Preview do avatar quando selecionar arquivo
+  const avatarInput = document.getElementById('{{ form.avatar.id_for_label }}');
+  const avatarPreview = document.getElementById('avatarPreview');
+  
+  if (avatarInput) {
+    avatarInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      
+      if (file) {
+        // Validar tamanho (5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('A imagem não pode ser maior que 5MB!');
+          avatarInput.value = '';
+          return;
+        }
+        
+        // Validar tipo
+        if (!file.type.startsWith('image/')) {
+          alert('Por favor, selecione apenas imagens!');
+          avatarInput.value = '';
+          return;
+        }
+        
+        // Mostrar preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          avatarPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" id="avatarImg">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+  
+  // Validação adicional do formulário
+  const form = document.getElementById('editProfileForm');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      const email = document.getElementById('{{ form.email.id_for_label }}');
+      
+      if (email && !email.value.trim()) {
+        e.preventDefault();
+        alert('O e-mail é obrigatório!');
+        email.focus();
+        return false;
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

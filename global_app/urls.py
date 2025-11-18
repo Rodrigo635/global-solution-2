@@ -4,11 +4,17 @@ from .views import *
 urlpatterns = [
     path('', home, name='home'),
 
+    # Rotas de autenticação
     path('login/', login, name='login'),
     path('signup/', signup, name='signup'),
     path('logout/', logout, name='logout'),
+    
+    # Rotas de perfil
     path('profile/', profile, name='my_profile'),
+    path('profile/edit/', edit_profile, name='edit_profile'),
     path('profile/<str:username>/', profile, name='public_profile'),
+    
+    # Rotas de gerais
     path('friends/', friends, name='friends'),
     path('work_ai/', work_ai, name='work_ai'),
     path('privacy_policy/', privacy_policy, name='privacy_policy'),

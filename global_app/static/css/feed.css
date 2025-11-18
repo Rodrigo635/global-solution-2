@@ -71,3 +71,26 @@ textarea.form-control:focus {
     line-height: 1.6;
     word-wrap: break-word;
 }
+
+/* Limitar bio nas sugestões */
+.sugestoes-sticky .small.text-muted {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+/* Garantir que o card de sugestão não quebre */
+.sugestoes-sticky .border {
+    overflow: hidden;
+}
+
+/* Prevenir overflow horizontal */
+.sugestoes-sticky {
+    overflow-x: hidden;
+    max-width: 100%;
+}

@@ -30,23 +30,28 @@
 
         <div class="mt-3 d-flex align-items-center gap-2 justify-content-center justify-content-md-start">
           <!-- Redes sociais -->
-          {% for social in profile.socials %}
-            <a href="{{ social.url }}" class="d-inline-flex align-items-center justify-content-center social-dot" target="_blank" rel="noopener">
-              <i class="{{ social.icon_class }}"></i>
-            </a>
-          {% empty %}
-            <div class="social-dot-placeholder d-flex gap-2">
-              <a class="social-dot d-flex align-items-center justify-content-center text-primary fs-3"><i class="bi bi-facebook"></i></a>
-              <a class="social-dot d-flex align-items-center justify-content-center text-primary fs-3"><i class="bi bi-instagram"></i></a>
-              <a class="social-dot d-flex align-items-center justify-content-center text-primary fs-3"><i class="bi bi-linkedin"></i></a>
+          {% if profile.socials %}
+            {% for social in profile.socials %}
+              <a href="{{ social.url }}" 
+                class="social-dot d-flex align-items-center justify-content-center fs-5" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="{{ social.name }}">
+                <i class="{{ social.icon_class }}"></i>
+              </a>
+            {% endfor %}
+          {% else %}
+            <div class="text-muted small">
+              <i class="bi bi-info-circle me-1"></i>
+              Nenhuma rede vinculada
             </div>
-          {% endfor %}
+          {% endif %}
         </div>
       </div>
 
       <div class="col-auto ms-auto">
-          <!-- Botão de editar -->
-        <a href="#" class="btn btn-outline-secondary rounded-circle btn-edit" title="Editar perfil">
+        <!-- Botão de editar -->
+        <a href="{% url 'edit_profile' %}" class="btn btn-outline-secondary rounded-circle btn-edit" title="Editar perfil">
           <i class="bi bi-pencil-fill"></i>
         </a>
       </div>

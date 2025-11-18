@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib import messages
 from django.urls import reverse
 from django.http import JsonResponse
-from .forms import SignUpForm, PostForm
+from .forms import SignUpForm, PostForm, ProfileEditForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -624,3 +624,32 @@ def privacy_policy(request):
 
 def terms_of_use(request):
     return render(request, 'pages/terms_of_use.html')
+
+@login_required
+def edit_profile(request):
+    """View para editar o perfil do usuário"""
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = ProfileEditForm(
+            request.POST, 
+            request.FILES, 
+            instance=profile,
+            user=request.user
+        )
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Perfil atualizado com sucesso!')
+            return redirect('my_profile')
+        else:
+            messages.error(request, 'Por favor corrija os erros no formulário.')
+    else:
+        form = ProfileEditForm(instance=profile, user=request.user)
+    
+    context = {
+        'form': form,
+        'profile': profile
+    }
+    
+    return render(request, 'pages/edit_profile.html', context)

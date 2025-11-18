@@ -85,9 +85,11 @@
                             <li class="nav-item ms-0 ms-md-2 mb-3 mb-lg-0"><a href="{% url 'my_profile' %}" class="user-nav-item"><i class="bi bi-person-fill fs-5"></i></a></li>
                         {% else %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Início</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#como">Como funciona</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#empresas">Para empresas</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#precos">Preços</a></li>
+                            {% if request.resolver_match.url_name == 'home' %}
+                                <li class="nav-item"><a class="nav-link" href="#como">Como funciona</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#empresas">Para empresas</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#precos">Preços</a></li>
+                            {% endif %}
                             <li class="nav-item ms-2 ms-0 ms-md-2 mb-2 mb-lg-0"><a class="btn btn-outline-primary" href="{% url 'login' %}">Entrar</a></li>
                             <li class="nav-item ms-2 ms-0 ms-md-2 mb-3 mb-lg-0"><a class="btn btn-primary" href="{% url 'signup' %}">Cadastrar</a></li>
                         {% endif %}
@@ -135,9 +137,11 @@
                                 <li><a href="{% url 'friends' %}"><i class="bi bi-people-fill me-2"></i>Amigos</a></li>
                                 <li><a href="{% url 'work_ai' %}"><i class="bi bi-robot me-2"></i>Work AI</a></li>
                             {% else %}
-                                <li><a href="#como">Como funciona</a></li>
-                                <li><a href="#empresas">Para empresas</a></li>
-                                <li><a href="#precos">Preços</a></li>
+                                {% if request.resolver_match.url_name == 'home' %}
+                                    <li><a href="#como"><i class="bi bi-question-circle-fill me-2"></i>Como funciona</a></li>
+                                    <li><a href="#empresas"><i class="bi bi-briefcase-fill me-2"></i>Para empresas</a></li>
+                                    <li><a href="#precos"><i class="bi bi-currency-dollar me-2"></i>Preços</a></li>
+                                {% endif %}
                             {% endif %}
                         </ul>
                     </div>
@@ -145,7 +149,7 @@
                         <h6 class="text-white"><i class="bi bi-info-circle me-2"></i>Dados legais e contato</h6>
                         <ul class="list-unstyled">
                             <li><a href="{% url 'terms_of_use' %}"><i class="bi bi-file-earmark-text-fill me-2"></i>Termos de uso</a></li>
-                            <li><a href="{% url 'privacy_policy' %}"><i class="bi bi-shield-lock-fill me-2"></i>Política de privacidade</a></li>
+                            <li><a href="{% url 'privacy_policy' %}"><i class="bi bi-shield-lock-fill me-2"></i>Política de privacidade</a></li>
                             <li><p><i class="bi bi-envelope-fill me-2"></i>connectfiap@gmail.com</p></li>
                         </ul>
                     </div>

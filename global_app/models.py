@@ -14,8 +14,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     uid = models.CharField(max_length=24, blank=True, default='')
     avatar = models.ImageField(upload_to=avatar_upload_to, blank=True, null=True)
-    bio = models.TextField(blank=True)
-    # Redes sociais com JSON (Não terminei de implementar)
+    bio = models.TextField(max_length=500, blank=True)
     socials = models.JSONField(default=list, blank=True)
     # Preferências de acessibilidade e configurações
     dark_mode = models.BooleanField(default=False)
