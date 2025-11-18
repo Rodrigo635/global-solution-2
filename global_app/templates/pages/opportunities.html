@@ -65,14 +65,14 @@
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="flex-grow-1">
                             <div class="d-flex align-items-center gap-2 mb-2">
-                                <span class="badge {% if opp.type == 'job' %}bg-primary{% elif opp.type == 'interview' %}bg-success{% else %}bg-info{% endif %}">
+                                <span class="badge bg-transparent border border-primary p-2 {% if opp.type == 'job' %}border-warning{% elif opp.type == 'interview' %}border-success{% else %}border-danger{% endif %}">
                                     {{ opp.get_type_display }}
                                 </span>
                                 {% if opp.work_mode %}
-                                <span class="badge bg-secondary">{{ opp.work_mode }}</span>
+                                <span class="badge bg-transparent border border-bottom-secondary p-2">{{ opp.work_mode }}</span>
                                 {% endif %}
                                 {% if opp.user_applied %}
-                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Inscrito</span>
+                                <span class="badge bg-transparent border border-success p-2"><i class="bi bi-check-circle me-1"></i>Inscrito</span>
                                 {% endif %}
                             </div>
                             <h5 class="mb-2">{{ opp.title }}</h5>
@@ -139,7 +139,7 @@
                                 <div class="fw-semibold small">{{ app.opportunity.title|truncatewords:4 }}</div>
                                 <div class="text-muted" style="font-size: 0.75rem;">{{ app.opportunity.company }}</div>
                             </div>
-                            <span class="badge {% if app.status == 'pending' %}bg-warning{% elif app.status == 'reviewing' %}bg-info{% elif app.status == 'accepted' %}bg-success{% else %}bg-danger{% endif %}">
+                            <span class="badge bg-transparent border p-2 {% if app.status == 'pending' %}border-warning{% elif app.status == 'reviewing' %}border-info{% elif app.status == 'accepted' %}border-success{% else %}border-danger{% endif %}">
                                 {{ app.get_status_display }}
                             </span>
                         </div>
@@ -176,27 +176,23 @@
     </div>
 </section>
 
-<!-- Modal de inscrição rápida -->
+<!-- Modal de inscrição -->
 <div class="modal fade" id="applyModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Candidatar-se à vaga</h5>
+                <h5 class="modal-title">Candidatar-se</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p class="mb-3">Candidatura para: <strong id="modalOpportunityTitle"></strong></p>
+                <p class="alert alert-info mb-3">Candidatura para: <strong id="modalOpportunityTitle"></strong></p>
                 
                 <div class="mb-3">
-                    <label class="form-label">Carta de Apresentação (Opcional)</label>
+                    <label class="form-label">Carta de Apresentação (Recomendado)</label>
                     <textarea class="form-control" id="coverLetter" rows="4" 
                               placeholder="Conte um pouco sobre você e por que está interessado nesta oportunidade..."></textarea>
                 </div>
                 
-                <div class="alert alert-info mb-0">
-                    <i class="bi bi-info-circle me-2"></i>
-                    <small>Você pode adicionar mais informações depois na página de detalhes</small>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

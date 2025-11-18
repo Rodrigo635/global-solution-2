@@ -1,0 +1,437 @@
+{% extends 'components/index.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/opportunities.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="container py-5">
+    <div class="row g-4">
+        
+        <!-- Coluna principal - Detalhes da Oportunidade -->
+        <div class="col-lg-8">
+            <!-- Botão voltar -->
+            <div class="mb-3">
+                <a href="{% url 'opportunities' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-1"></i>Voltar para oportunidades
+                </a>
+            </div>
+
+            <!-- Card principal -->
+            <div class="feature-card p-4 mb-4">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge bg-transparent border border-primary p-2 {% if opp.type == 'job' %}border-warning{% elif opp.type == 'interview' %}border-success{% else %}border-danger{% endif %} fs-6">
+                                {{ opportunity.get_type_display }}
+                            </span>
+                            {% if opportunity.work_mode %}
+                            <span class="badge bg-transparent border border-bottom-secondary p-2 fs-6">{{ opportunity.work_mode }}</span>
+                            {% endif %}
+                            {% if user_application %}
+                            <span class="badge bg-transparent border border-success p-2 fs-6">
+                                <i class="bi bi-check-circle me-1"></i>Você se inscreveu
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <h3 class="mb-3">{{ opportunity.title }}</h3>
+                        
+                        {% if opportunity.company %}
+                        <div class="d-flex flex-wrap gap-3 text-muted mb-3">
+                            <span><i class="bi bi-building me-2"></i>{{ opportunity.company }}</span>
+                            {% if opportunity.location %}
+                            <span><i class="bi bi-geo-alt me-2"></i>{{ opportunity.location }}</span>
+                            {% endif %}
+                            {% if opportunity.salary_range %}
+                            <span><i class="bi bi-cash me-2"></i>{{ opportunity.salary_range }}</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Informações rápidas -->
+                        <div class="d-flex flex-wrap gap-3 small text-muted">
+                            <span><i class="bi bi-people me-1"></i>{{ opportunity.total_applications }} candidaturas</span>
+                            <span><i class="bi bi-clock me-1"></i>Publicado {{ opportunity.created_at|timesince }} atrás</span>
+                            {% if opportunity.deadline %}
+                            <span>
+                                <i class="bi bi-calendar-event me-1"></i>
+                                Prazo: {{ opportunity.deadline|date:"d/m/Y" }}
+                                {% if opportunity.is_expired %}
+                                <span class="badge bg-danger ms-1">Expirado</span>
+                                {% endif %}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Descrição -->
+                <div class="mb-4">
+                    <h5 class="mb-3">Descrição</h5>
+                    <p style="white-space: pre-line;">{{ opportunity.description }}</p>
+                </div>
+
+
+                {% if opportunity.requirements %}
+                <hr>
+                <!-- Requisitos -->
+                <div class="mb-4">
+                    <h5 class="mb-3">Requisitos</h5>
+                    <p style="white-space: pre-line;">{{ opportunity.requirements }}</p>
+                </div>
+                {% endif %}
+
+                {% if opportunity.skills %}
+                <hr>
+                <!-- Habilidades -->
+                <div class="mb-4">
+                    <h5 class="mb-3">Habilidades Necessárias</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-light text-dark border p-2">{{ opportunity.skills }}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <hr>
+
+                <!-- Botões de ação -->
+                <div class="d-flex gap-2 flex-wrap">
+                    {% if user_application %}
+                        <!-- Usuário já se inscreveu -->
+                        <button class="btn btn-success" disabled>
+                            <i class="bi bi-check-circle me-2"></i>Inscrição enviada
+                        </button>
+                        
+                        {% if user_application.status == 'pending' %}
+                        <button class="btn btn-outline-danger" onclick="confirmCancelApplication({{ user_application.id }})">
+                            <i class="bi bi-x-circle me-2"></i>Cancelar inscrição
+                        </button>
+                        {% endif %}
+                        
+                        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#applicationDetailsModal">
+                            <i class="bi bi-eye me-2"></i>Ver minha inscrição
+                        </button>
+                    {% else %}
+                        <!-- Usuário não se inscreveu -->
+                        {% if opportunity.status == 'open' and not opportunity.is_expired %}
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#applyModal">
+                            <i class="bi bi-check-circle me-2"></i>Candidatar-se
+                        </button>
+                        {% elif opportunity.is_expired %}
+                        <button class="btn btn-secondary" disabled>
+                            <i class="bi bi-clock-history me-2"></i>Prazo encerrado
+                        </button>
+                        {% else %}
+                        <button class="btn btn-secondary" disabled>
+                            <i class="bi bi-lock me-2"></i>Oportunidade fechada
+                        </button>
+                        {% endif %}
+                    {% endif %}
+                    
+                    <button class="btn btn-outline-secondary" onclick="shareOpportunity()">
+                        <i class="bi bi-share me-2"></i>Compartilhar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="col-lg-4">
+            <!-- Status da inscrição (se inscrito) -->
+            {% if user_application %}
+            <div class="feature-card p-4 mb-4">
+                <h6 class="mb-3">Status da sua inscrição</h6>
+                
+                <div class="text-center py-3">
+                    {% if user_application.status == 'pending' %}
+                        <i class="bi bi-clock-history text-warning" style="font-size: 3rem;"></i>
+                        <h5 class="mt-2">Pendente</h5>
+                        <p class="text-muted small">Sua inscrição está aguardando análise</p>
+                    {% elif user_application.status == 'reviewing' %}
+                        <i class="bi bi-search text-info" style="font-size: 3rem;"></i>
+                        <h5 class="mt-2">Em Análise</h5>
+                        <p class="text-muted small">Sua inscrição está sendo avaliada</p>
+                    {% elif user_application.status == 'accepted' %}
+                        <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-2">Aceito!</h5>
+                        <p class="text-muted small">Parabéns! Você foi selecionado</p>
+                    {% elif user_application.status == 'rejected' %}
+                        <i class="bi bi-x-circle text-danger" style="font-size: 3rem;"></i>
+                        <h5 class="mt-2">Não selecionado</h5>
+                        <p class="text-muted small">Infelizmente você não foi selecionado desta vez</p>
+                    {% endif %}
+                </div>
+                
+                <div class="border-top pt-3 mt-3">
+                    <small class="text-muted">
+                        <i class="bi bi-calendar-check me-1"></i>
+                        Inscrito em {{ user_application.applied_at|date:"d/m/Y às H:i" }}
+                    </small>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Informações adicionais -->
+            <div class="feature-card p-4 mb-4">
+                <h6 class="mb-3">Informações</h6>
+                
+                <div class="d-flex flex-column gap-3">
+                    {% if opportunity.company %}
+                    <div>
+                        <small class="text-muted d-block mb-1">Empresa</small>
+                        <strong>{{ opportunity.company }}</strong>
+                    </div>
+                    {% endif %}
+                    
+                    {% if opportunity.location %}
+                    <div>
+                        <small class="text-muted d-block mb-1">Localização</small>
+                        <strong>{{ opportunity.location }}</strong>
+                    </div>
+                    {% endif %}
+                    
+                    {% if opportunity.work_mode %}
+                    <div>
+                        <small class="text-muted d-block mb-1">Modo de Trabalho</small>
+                        <strong>{{ opportunity.work_mode }}</strong>
+                    </div>
+                    {% endif %}
+                    
+                    {% if opportunity.salary_range %}
+                    <div>
+                        <small class="text-muted d-block mb-1">Faixa Salarial</small>
+                        <strong>{{ opportunity.salary_range }}</strong>
+                    </div>
+                    {% endif %}
+                    
+                    <div>
+                        <small class="text-muted d-block mb-1">Tipo</small>
+                        <strong>{{ opportunity.get_type_display }}</strong>
+                    </div>
+                    
+                    <div>
+                        <small class="text-muted d-block mb-1">Candidaturas</small>
+                        <strong>{{ opportunity.total_applications }} pessoas se inscreveram</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dicas -->
+            <div class="feature-card p-4">
+                <h6 class="mb-3"><i class="bi bi-lightbulb me-2"></i>Dicas</h6>
+                <ul class="small mb-0 ps-3">
+                    <li class="mb-2">Complete seu perfil para aumentar suas chances</li>
+                    <li class="mb-2">Entre em contato com as empresas</li>
+                    <li class="mb-2">Candidate-se rapidamente às oportunidades</li>
+                    <li>Acompanhe o status das suas inscrições</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<!-- Modal de inscrição -->
+<!-- Modal de inscrição rápida -->
+<div class="modal fade" id="applyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Candidatar-se</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="alert alert-info mb-3">Candidatura para: <strong id="modalOpportunityTitle">{{ opportunity.title }}</strong></p>
+                
+                <div class="mb-3">
+                    <label class="form-label">Carta de Apresentação (Recomendado)</label>
+                    <textarea class="form-control" id="coverLetter" rows="4" 
+                              placeholder="Conte um pouco sobre você e por que está interessado nesta oportunidade..."></textarea>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmApplyBtn">
+                    <i class="bi bi-check-circle me-1"></i>Confirmar Inscrição
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de detalhes da inscrição -->
+{% if user_application %}
+<div class="modal fade" id="applicationDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalhes da Inscrição</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <strong>Oportunidade:</strong><br>
+                    {{ opportunity.title }}
+                </div>
+                
+                <div class="mb-3">
+                    <strong class="mb-2">Status:</strong><br>
+                    <span class="badge bg-transparent border p-2 {% if user_application.status == 'pending' %}border-warning{% elif user_application.status == 'reviewing' %}border-info{% elif user_application.status == 'accepted' %}border-success{% else %}border-danger{% endif %}">
+                        {{ user_application.get_status_display }}
+                    </span>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Data da Inscrição:</strong><br>
+                    {{ user_application.applied_at|date:"d/m/Y às H:i" }}
+                </div>
+                
+                {% if user_application.cover_letter %}
+                <div class="mb-3">
+                    <strong>Carta de Apresentação:</strong>
+                    <div class="border rounded p-3 mt-2">
+                        <p style="white-space: pre-line; margin-bottom: 0;">{{ user_application.cover_letter }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg me-2"></i>Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+// CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+// Confirmar candidatura
+document.addEventListener('DOMContentLoaded', function() {
+    const confirmBtn = document.getElementById('confirmApplyDetailBtn');
+    
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', async function() {
+            const coverLetter = document.getElementById('coverLetterDetail').value.trim();
+            
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Enviando...';
+            
+            try {
+                const response = await fetch(`/api/opportunities/apply/{{ opportunity.id }}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        cover_letter: coverLetter
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    bootstrap.Modal.getInstance(document.getElementById('applyModal')).hide();
+                    showToast('success', data.message);
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('error', data.error || 'Erro ao enviar inscrição');
+                    confirmBtn.disabled = false;
+                    confirmBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Confirmar Candidatura';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showToast('error', 'Erro ao enviar inscrição');
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Confirmar Candidatura';
+            }
+        });
+    }
+});
+
+// Cancelar inscrição
+function confirmCancelApplication(applicationId) {
+    if (!confirm('Tem certeza que deseja cancelar sua inscrição? Esta ação não pode ser desfeita.')) {
+        return;
+    }
+    
+    cancelApplication(applicationId);
+}
+
+async function cancelApplication(applicationId) {
+    try {
+        const response = await fetch(`/api/opportunities/cancel/${applicationId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showToast('success', data.message);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('error', data.error);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        showToast('error', 'Erro ao cancelar inscrição');
+    }
+}
+
+// Compartilhar oportunidade
+function shareOpportunity() {
+    const url = window.location.href;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ opportunity.title }}',
+            text: 'Confira esta oportunidade: {{ opportunity.title }}',
+            url: url
+        }).catch(err => console.log('Erro ao compartilhar:', err));
+    } else {
+        // Fallback: copiar URL
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('success', 'Link copiado para a área de transferência!');
+        });
+    }
+}
+
+// Toast
+function showToast(type, message) {
+    if (window.createToast) {
+        window.createToast(message, type);
+    } else {
+        alert(message);
+    }
+}
+</script>
+
+{% endblock %}

@@ -243,3 +243,15 @@ footer a {
     background-color: var(--primary-hover) !important;
     border-color: var(--primary-hover) !important;
 }
+
+.badge {
+    color: #222 !important;
+}
+
+.badge-text-white {
+    color: white !important;
+}
+
+.badge-border-none {
+    border: none !important;
+}

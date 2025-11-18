@@ -32,7 +32,7 @@
                                     {% endif %}
                                 </div>
                                 <div>
-                                    <div class="fw-semibold">{{ suggested_user.get_full_name|default:suggested_user.username }}</div>
+                                    <div class="fw-semibold">{{ suggested_user.username|default:suggested_user.username }}</div>
                                     <div class="small text-muted">
                                         {% if suggested_user.profile and suggested_user.profile.bio %}
                                             {{ suggested_user.profile.bio|truncatewords:5 }}

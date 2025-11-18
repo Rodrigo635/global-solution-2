@@ -1,0 +1,11 @@
+
+/* Responsividade */
+@media (max-width: 991px) {
+    .opportunity-card {
+        margin-bottom: 1rem;
+    }
+    
+    aside {
+        margin-top: 2rem;
+    }
+}
