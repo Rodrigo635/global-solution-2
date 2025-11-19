@@ -2,8 +2,11 @@
 
 Projeto desenvolvido para a Global Solution 2 da **FIAP**.
 
+## Documentação do projeto
+* **Global Solution 2**: [Documentação da solução](https://docs.google.com/document/d/1zEIgvzu84Ja9GmOHL1CJsRCb0wIlL_8X3E53fJUdhJs/edit?usp=sharing)
+
 ## 📺 Vídeo apresentando o projeto
-* **Global Solution 2**: [Apresentação da solução](https://www.youtube.com)
+* **Global Solution 2**: [Apresentação da solução](https://www.youtube.com/watch?v=-cecIOttRJU)
 
 ---
 
