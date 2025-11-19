@@ -81,7 +81,7 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'calls' %}">Chamadas</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'opportunities' %}">Oportunidades</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'friends' %}">Amigos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'work_ai' %}">Work AI</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'work_ai' %}">Connecta AI</a></li>
                             <li class="nav-item ms-0 ms-md-2 mb-3 mb-lg-0"><a href="{% url 'my_profile' %}" class="user-nav-item"><i class="bi bi-person-fill fs-5"></i></a></li>
                         {% else %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Início</a></li>
@@ -135,7 +135,7 @@
                                 <li><a href="{% url 'calls' %}"><i class="bi bi-telephone-fill me-2"></i>Chamadas</a></li>
                                 <li><a href="{% url 'opportunities' %}"><i class="bi bi-briefcase-fill me-2"></i>Oportunidades</a></li>
                                 <li><a href="{% url 'friends' %}"><i class="bi bi-people-fill me-2"></i>Amigos</a></li>
-                                <li><a href="{% url 'work_ai' %}"><i class="bi bi-robot me-2"></i>Work AI</a></li>
+                                <li><a href="{% url 'work_ai' %}"><i class="bi bi-robot me-2"></i>Connecta AI</a></li>
                             {% else %}
                                 {% if request.resolver_match.url_name == 'home' %}
                                     <li><a href="#como"><i class="bi bi-question-circle-fill me-2"></i>Como funciona</a></li>
